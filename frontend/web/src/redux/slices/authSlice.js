@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import myAxios from '../../utils/interceptor';
+// import myAxios from '../../utils/interceptor';
 
 export const login = createAsyncThunk(
   '/login',
