@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <header className="home-header">
-        <h1>Bienvenue sur l'Appli Burn Out</h1>
+        <h1>Bienvenue sur l'Appli RebootMind</h1>
       </header>
       <main className="home-main">
         <section className="intro">

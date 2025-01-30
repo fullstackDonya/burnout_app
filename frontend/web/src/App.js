@@ -11,6 +11,7 @@ import Users from "./Components/Users/Users";
 import AddUser from "./Components/Users/AddUser";
 import UpdateUser from "./Components/Users/UpdateUser";
 import Navbar from "./Components/Navbar/Navbar"; 
+import Message from "./Components/Message/Message"; 
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/edit_user/:id" element={<UpdateUser />} />
           <Route path="/edit_meeting/:id" element={<EditMeeting />} />
           <Route path="/get_meeting/:id" element={<GetMeeting />} />
+          <Route path="/message" element={<Message />} />
         </Routes>
 
       </BrowserRouter>
