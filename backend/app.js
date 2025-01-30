@@ -3,21 +3,21 @@ const app = express();
 app.use(express.json());
 
 
-const PORT = 8080;
+const PORT = 8082;
 
 // AJOUTER LES DEUX LIGNES ICI
 const cors = require("cors");
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3001" }));
 
 
 
 const mongoose = require("mongoose");
-// mongoose.connect("mongodb://localhost:27017/trylundi", {
+// // mongoose.connect("mongodb://localhost:27017/trylundi", {
   
-// });
+// // });
 
 mongoose
-  .connect("mongodb://localhost:27017/leboncoin", {})
+  .connect("mongodb://localhost:27017/burnout_database", {})
   .then(() => {
     console.log("Connected to the mongoDB database!");
   })
