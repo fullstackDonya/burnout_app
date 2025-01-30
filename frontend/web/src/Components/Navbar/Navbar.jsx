@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css"; 
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Vérifiez si l'utilisateur est connecté (par exemple, en vérifiant un token dans le localStorage)
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    // Supprimez le token ou effectuez d'autres actions de déconnexion
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -10,19 +24,19 @@ const Navbar = () => {
       </div>
       <ul className="navbar-links">
         <li>
-          <Link to="/home">Accueil</Link>
+          <Link to="/">Accueil</Link>
         </li>
-        <li>
-          <Link to="/meeting">Créer un Post</Link>
-        </li>
-        <li>
-          <Link to="/users">Gestion des Utilisateurs</Link>
-        </li>
+        {!isLoggedIn ? (
+          <li>
+            <Link to="/login">Connexion</Link>
+          </li>
+        ) : (
+          <li>
+            <Link to="/" onClick={handleLogout}>Déconnexion</Link>
+          </li>
+        )}
         <li>
           <Link to="/register">Inscription</Link>
-        </li>
-        <li>
-          <Link to="/">Déconnexion</Link>
         </li>
       </ul>
     </nav>
