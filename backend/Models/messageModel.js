@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const messageSchema = new mongoose.Schema({
+    conversation: { type: mongoose.Schema.Types.ObjectId, ref: 'Conversation', required: true }, // Référence à la conversation
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Expéditeur du message
+    content: { type: String, required: true }, // Contenu du message
+    readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Liste des utilisateurs qui ont lu le message
+}, { timestamps: true }); 
 
-const MessageSchema = new Schema({
-    participants: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    message: { type: String, required: true },
-}, { timestamps: true });
-
-module.exports = mongoose.model('Message', MessageSchema);
+const Message = mongoose.model('Message', messageSchema);
+module.exports = Message;

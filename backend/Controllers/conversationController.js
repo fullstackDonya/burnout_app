@@ -1,45 +1,92 @@
-const Conversation = require('../Models/conversationModel');
+const Conversation = require("../Models/conversationModel");
+const Message = require("../Models/messageModel");
 
-// Create a new conversation
 const createConversation = async (req, res) => {
-    const newConversation = new Conversation({
-        members: [req.body.senderId, req.body.receiverId],
-    });
-
     try {
-        const savedConversation = await newConversation.save();
-        res.status(200).json(savedConversation);
-    } catch (err) {
-        res.status(500).json(err);
+        const { sender, content } = req.body;
+
+        if (!sender || !content) {
+            return res.status(400).json({ message: "Sender and content are required" });
+        }
+
+        const conversation = new Conversation({ sender, content });
+        await conversation.save();
+
+        res.status(201).json(conversation);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Get conversations of a user
-const getConversations = async (req, res) => {
-    try {
-        const conversations = await Conversation.find({
-            members: { $in: [req.params.userId] },
-        });
-        res.status(200).json(conversations);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-};
+module.exports = { createConversation };
 
-// Get conversation includes two userId
-const getConversationByTwoUserIds = async (req, res) => {
+
+
+// Récupérer une conversation par ID
+const getConversationById = async (req, res) => {
     try {
-        const conversation = await Conversation.findOne({
-            members: { $all: [req.params.firstUserId, req.params.secondUserId] },
-        });
+        const conversation = await Conversation.findById(req.params.id).populate("senders", "name");
+        if (!conversation) {
+            return res.status(404).json({ message: "Conversation introuvable." });
+        }
         res.status(200).json(conversation);
-    } catch (err) {
-        res.status(500).json(err);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getAllConversations = async (req, res) => {
+    try {
+        const conversations = await Conversation.find();
+        res.status(200).json(conversations);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+// Récupérer toutes les conversations d'un utilisateur
+const getUserConversations = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({ message: "L'ID de l'utilisateur est requis." });
+        }
+
+        const conversations = await Conversation.find({ senders: userId })
+            .populate("senders", "name");
+
+        res.status(200).json(conversations);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Supprimer une conversation et ses messages associés
+const deleteConversation = async (req, res) => {
+    try {
+        const { conversationId } = req.params;
+
+        const conversation = await Conversation.findById(conversationId);
+        if (!conversation) {
+            return res.status(404).json({ message: "Conversation introuvable." });
+        }
+
+        // Supprimer tous les messages liés
+        await Message.deleteMany({ conversation: conversationId });
+
+        // Supprimer la conversation
+        await Conversation.deleteOne({ _id: conversationId });
+
+        res.status(200).json({ message: "Conversation supprimée avec succès." });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
 module.exports = {
     createConversation,
-    getConversations,
-    getConversationByTwoUserIds,
+    getConversationById,
+    getUserConversations,
+    deleteConversation,
+    getAllConversations
 };

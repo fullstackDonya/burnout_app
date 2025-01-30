@@ -29,9 +29,11 @@ const {
 } = require("../Controllers/appointmentController");
 
 const {
-  getConversations,
   createConversation,
-  getConversationByTwoUserIds,
+  getConversationById,
+  getUserConversations,
+  deleteConversation,
+  getAllConversations
 } = require("../Controllers/conversationController");
 
 const {
@@ -39,7 +41,10 @@ const {
   getMessageById,
   createMessage,
   updateMessage,
-  deleteMessage
+  deleteMessage,
+  sendMessage,
+  getMessages
+
 } = require("../Controllers/messageController");
 
 const router = express.Router();
@@ -69,9 +74,11 @@ router.put("/appointment/:id", authMiddleware, updateAppointment);
 router.delete("/appointment/:id", authMiddleware, deleteAppointment);
 
 // Routes conversations
-router.get("/conversations", authMiddleware, getConversations);
 router.post("/conversation", authMiddleware, createConversation);
-router.get("/conversation/:senderId/:receiverId", authMiddleware, getConversationByTwoUserIds);
+router.get("/conversation/:id", authMiddleware, getConversationById);
+router.get("/conversations/user/:userId", authMiddleware, getUserConversations);
+router.delete("/conversation/:conversationId", authMiddleware, deleteConversation);
+router.get("/conversations", authMiddleware, getAllConversations);
 
 // Routes messages
 router.get("/messages", authMiddleware, getAllMessages);
@@ -79,5 +86,8 @@ router.get("/message/:id", authMiddleware, getMessageById);
 router.post("/message", authMiddleware, createMessage);
 router.put("/message/:id", authMiddleware, updateMessage);
 router.delete("/message/:id", authMiddleware, deleteMessage);
+router.post("/message/send", authMiddleware, sendMessage);
+router.get("/message/:conversationId", authMiddleware, getMessages);
+
 
 module.exports = router;
