@@ -33,6 +33,7 @@ const {
   getConversationById,
   getUserConversations,
   deleteConversation,
+  getAllConversations
 } = require("../Controllers/conversationController");
 
 const {
@@ -89,6 +90,7 @@ router.delete("/appointment/:id", authMiddleware, deleteAppointment);
 
 // Routes conversations
 router.post("/conversations", authMiddleware, createConversation);
+router.get("/conversations", authMiddleware, getAllConversations);
 router.get("/conversations/:id", authMiddleware, getConversationById);
 router.get("/conversations/user/:userId", authMiddleware, getUserConversations); // Route pour récupérer les conversations d'un utilisateur
 router.delete("/conversations/:id", authMiddleware, deleteConversation);

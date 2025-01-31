@@ -1,6 +1,14 @@
 const Conversation = require("../Models/conversationModel");
 const Message = require("../Models/messageModel");
 
+const getAllConversations = async (req, res) => {
+    try {
+        const conversations = await Conversation.find().populate("senders", "name");
+        res.status(200).json(conversations);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 const createConversation = async (req, res) => {
     try {
         const { senders, messages } = req.body;
@@ -77,4 +85,5 @@ module.exports = {
     getConversationById,
     getUserConversations,
     deleteConversation,
+    getAllConversations
 };
