@@ -1,5 +1,5 @@
-import store from "../store/store";
-import { addMessageToConversation } from "../store/conversationSlice";
+import store from "../redux/store";
+import { addMessageToConversation } from "../redux/conversationSlice";
 
 const WS_URL = "ws://localhost:8082"; 
 let socket;

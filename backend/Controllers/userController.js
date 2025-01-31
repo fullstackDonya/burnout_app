@@ -116,22 +116,26 @@ const getUsers = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-
-
 const getUser = async (req, res) => {
   try {
-    const userId = req.params.id; 
-
-    const user = await User.findById(userId).select("-password"); 
+    const user = await User.findById(req.user.id
+    ).select("-password");
     if (!user) {
       return res.status(404).send({ message: "Utilisateur introuvable" });
     }
-
-    res.status(200).send(user); 
-  } catch (error) {
+    res.status(200).send(user);
+  }
+  catch (error) {
     res.status(500).send({ message: "Erreur serveur : " + error.message });
   }
 };
 
-
-module.exports = { Register, Login, updateUser, deleteUser, getUsers, getUser, deleteUsers};
+const Logout = (req, res) => {
+  try {
+    req.user = null; // Clear the user information from the request
+    res.status(200).send({ message: "Déconnecté avec succès" });
+  } catch (error) {
+    res.status(500).send({ message: "Erreur serveur : " + error.message });
+  }
+};
+module.exports = { Register, Login, updateUser, deleteUser, getUsers, getUser, deleteUsers, Logout };

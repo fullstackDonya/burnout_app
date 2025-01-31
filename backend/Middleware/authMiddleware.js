@@ -1,24 +1,25 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        return res.status(401).json({ message: 'Authorization header missing' });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ message: 'Token missing' });
-    }
-
+    
+    
     try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ message: "Accès refusé. Aucun token fourni." });
+        }
+
+        const token = authHeader.split(" ")[1]; // Récupérer le token après "Bearer"
+        
+        // Vérifier et décoder le token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+        
+        // Ajouter l'utilisateur à la requête
+        req.user = decoded;  // ICI on assigne decoded à req.user au lieu de "user"
+        console.log(req.user);
         next();
-    } catch (err) {
-        return res.status(401).json({ message: 'Invalid token' });
+    } catch (error) {
+        res.status(401).json({ message: "Token invalide." });
     }
 };
 

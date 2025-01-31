@@ -14,7 +14,7 @@ const AddUser = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:8080/register",
+        "http://localhost:8082/register",
         { username, email, password },
         {
           headers: {

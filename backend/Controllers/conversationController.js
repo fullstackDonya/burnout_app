@@ -3,12 +3,13 @@ const Message = require("../Models/messageModel");
 
 const getAllConversations = async (req, res) => {
     try {
-        const conversations = await Conversation.find().populate("senders", "name");
+        const conversations = await Conversation.find();
         res.status(200).json(conversations);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 const createConversation = async (req, res) => {
     try {
         const { senders, messages } = req.body;
@@ -55,8 +56,16 @@ const getConversationById = async (req, res) => {
 
 // Récupérer toutes les conversations d'un utilisateur
 const getUserConversations = async (req, res) => {
+    console.log('====================================');
+    console.log(req.user.id);
+    console.log('====================================');
     try {
-        const conversations = await Conversation.find({ senders: req.params.userId }).populate("senders", "name");
+
+        // Utilisez req.user.id pour obtenir l'ID de l'utilisateur authentifié
+        const conversations = await Conversation.find({ senders: req.user.id })
+
+            .populate("senders", "name")
+            .populate("messages");
         res.status(200).json(conversations);
     } catch (error) {
         res.status(500).json({ message: error.message });

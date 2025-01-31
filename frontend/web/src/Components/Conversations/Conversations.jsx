@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchConversations, createConversation } from "../../store/conversationSlice";
+import { fetchConversations, createConversation } from "../../redux/conversationSlice";
 import { connectWebSocket, sendMessage } from "../../utils/websocket";
 
 const Conversations = () => {
@@ -12,7 +12,7 @@ const Conversations = () => {
     useEffect(() => {
         if (userId) {
             // Charger les conversations depuis l'API
-            dispatch(fetchConversations(userId));
+            dispatch(fetchConversations());
             connectWebSocket();
         }
     }, [dispatch, userId]);

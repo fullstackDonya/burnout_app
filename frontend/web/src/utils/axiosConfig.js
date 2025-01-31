@@ -1,32 +1,33 @@
-import axios from 'axios';
-import store from '../store/store';
 
-axios.defaults.baseURL = "http://localhost:8082"; 
+import axios from "axios";
 
-axios.interceptors.request.use(
-  (config) => {
-    const token = store.getState().auth.token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+const MyAxios = axios.create({
+	baseURL: "http://localhost:8082",
+});
+
+MyAxios.interceptors.request.use((request) => {
+	const token = localStorage.getItem("token");
+	console.log("token envoyer", token);
+	if (token) {
+		request.headers.Authorization = `Bearer ${token}`;
+	}
+	return request;
+});
+
+MyAxios.interceptors.response.use(
+	(response) => {
+		if (response.data.token) {
+			console.log("Token received:", response.data.token);
+			localStorage.setItem("token", response.data.token);
+		}
+		return response;
+	},
+	(error) => {
+		if (error.response && error.response.status === 401) {
+			localStorage.removeItem("token");
+		}
+		return Promise.reject(error);
+	}
 );
 
-axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Handle unauthorized access
-      store.dispatch({ type: 'LOGOUT' });
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default axios;
+export default MyAxios;

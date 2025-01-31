@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store/store"; 
+import store from "./store/store"; // Assurez-vous que le chemin est correct
 import Register from "./Components/Register/Register";
 import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home";
@@ -12,7 +12,9 @@ import Users from "./Components/Users/Users";
 import AddUser from "./Components/Users/AddUser";
 import UpdateUser from "./Components/Users/UpdateUser";
 import Navbar from "./Components/Navbar/Navbar"; 
+import Logout from "./Components/Logout/logout";
 import Conversations from "./Components/Conversations/Conversations"; 
+import Account from "./Components/Users/Account"; 
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/" element={<Home />} />
             <Route path="/meeting" element={<AddMeeting />} />
             <Route path="/users" element={<Users />} />
@@ -31,6 +34,7 @@ function App() {
             <Route path="/edit_meeting/:id" element={<EditMeeting />} />
             <Route path="/get_meeting/:id" element={<GetMeeting />} />
             <Route path="/conversations" element={<Conversations />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </BrowserRouter>
       </div>

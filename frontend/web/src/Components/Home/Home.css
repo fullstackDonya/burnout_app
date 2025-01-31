@@ -94,3 +94,34 @@ p {
       width: 100%; /* Les boutons prennent toute la largeur */
   }
 }
+
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.btn-primary {
+  background-color: white;
+  color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}

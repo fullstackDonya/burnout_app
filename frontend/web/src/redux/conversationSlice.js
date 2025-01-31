@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../utils/axiosConfig"; 
+import axios from "../utils/axiosConfig"; // Utiliser la configuration Axios avec les interceptors
 
 export const fetchConversations = createAsyncThunk(
   "conversations/fetchConversations",
-  async (userId, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/conversations/user/${userId}`);
+      const response = await axios.get(`/conversation`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

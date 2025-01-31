@@ -59,7 +59,9 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Liste des recettes</h1>
+      {/* creer un hero */}
+      
+  
       {/* <button className="add" onClick={handleAdd}>Ajouter une recette</button> */}
       <ul>
         {posts.map((post) => (

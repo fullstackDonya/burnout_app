@@ -9,6 +9,7 @@ const {
   deleteUser,
   getUsers,
   getUser,
+  Logout
 } = require("../Controllers/userController");
 
 const {
@@ -65,6 +66,8 @@ router.delete("/delete", authMiddleware, deleteUsers);
 router.delete("/delete/:id", authMiddleware, deleteUser);
 router.get("/users", authMiddleware, getUsers);
 router.get("/user/:id", authMiddleware, getUser);
+router.get("/logout", authMiddleware, Logout);
+
 
 // Routes posts
 router.get("/posts", getAllPosts);
@@ -92,7 +95,7 @@ router.delete("/appointment/:id", authMiddleware, deleteAppointment);
 router.post("/conversations", authMiddleware, createConversation);
 router.get("/conversations", authMiddleware, getAllConversations);
 router.get("/conversations/:id", authMiddleware, getConversationById);
-router.get("/conversations/user/:userId", authMiddleware, getUserConversations); // Route pour récupérer les conversations d'un utilisateur
+router.get("/conversation", authMiddleware, getUserConversations); // Route pour récupérer les conversations d'un utilisateur
 router.delete("/conversations/:id", authMiddleware, deleteConversation);
 
 

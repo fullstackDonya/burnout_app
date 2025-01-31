@@ -12,7 +12,7 @@ const UpdateUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/user/${id}`, {
+      .get(`http://localhost:8082/user/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -39,7 +39,7 @@ const UpdateUser = () => {
     e.preventDefault();
     axios
       .put(
-        `http://localhost:8080/update/${id}`, 
+        `http://localhost:8082/update/${id}`, 
         { username, email },
         {
           headers: {

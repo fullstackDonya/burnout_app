@@ -10,7 +10,7 @@ const Users = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/users", {
+      .get("http://localhost:8082/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
