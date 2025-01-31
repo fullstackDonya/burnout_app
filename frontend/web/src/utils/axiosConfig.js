@@ -1,8 +1,7 @@
-
 import axios from "axios";
 
 const MyAxios = axios.create({
-	baseURL: "http://localhost:8082",
+	baseURL: "http://localhost:8082/",
 });
 
 MyAxios.interceptors.request.use((request) => {
@@ -11,6 +10,9 @@ MyAxios.interceptors.request.use((request) => {
 	if (token) {
 		request.headers.Authorization = `Bearer ${token}`;
 	}
+  console.log('====================================');
+  console.log(token);
+  console.log('====================================');
 	return request;
 });
 

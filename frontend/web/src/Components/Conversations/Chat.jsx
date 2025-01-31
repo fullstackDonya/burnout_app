@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { connectWebSocket, sendMessage } from '../../utils/websocket';
-import { fetchMessages } from '../../store/messageSlice';
+import { fetchMessages } from '../../redux/messageSlice';
 
 const Chat = ({ conversationId }) => {
     const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const Chat = ({ conversationId }) => {
 
     return (
         <div>
+            <br /><br /><br /><br /><br />
             <h2>Chat</h2>
             <div>
                 {messages.map((msg, index) => (

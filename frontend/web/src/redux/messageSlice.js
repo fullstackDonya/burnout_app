@@ -12,6 +12,17 @@ export const fetchMessages = createAsyncThunk(
     }
   }
 );
+export const sendMessage = createAsyncThunk(
+  "messages/sendMessage",
+  async ({ conversationId, message }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`/messages`, { message });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const messageSlice = createSlice({
   name: 'messages',

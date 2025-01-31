@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "../../utils/axiosConfig"; // Importer la configuration Axios
-import { setCredentials } from "../../store/authSlice";
+import { setCredentials } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
