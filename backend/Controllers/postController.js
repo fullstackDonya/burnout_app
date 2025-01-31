@@ -1,4 +1,4 @@
-const Post = require('../Models/Post');
+const Post = require('../Models/postModel');
 
 // Get all posts
 const getAllPosts = async (req, res) => {
@@ -54,3 +54,10 @@ const deletePost = async (req, res) => {
     }
 };
 
+module.exports = {
+    getAllPosts,
+    getPostById,
+    createPost,
+    updatePost,
+    deletePost
+ }

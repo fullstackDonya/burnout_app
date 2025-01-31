@@ -27,9 +27,9 @@ const Home = () => {
       });
   }, []);
 
-  const handleAdd = () => {
-    navigate("/post"); 
-  };
+  // const handleAdd = () => {
+  //   navigate("/post"); 
+  // };
 
   const handleEdit = (id) => {
     navigate(`/edit_post/${id}`); 
@@ -41,15 +41,15 @@ const Home = () => {
   const handleDelete = (id) => {
     if (window.confirm("Voulez-vous vraiment supprimer cette recette ?")) {
       axios
-        .delete(`http://localhost:8080/post/${id}`, {
+        .delete(`http://localhost:8082/post/${id}`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         })
         .then(() => {
           alert("Recette supprimée avec succès !");
-          // Met à jour l'état pour supprimer la recette de l'affichage
-          setPosts(posts.filter((post) => post._id !== id)); // Assurez-vous que la clé est '_id' pour MongoDB
+         
+          setPosts(posts.filter((post) => post._id !== id)); 
         })
         .catch((error) => {
           console.error("Erreur lors de la suppression de la recette", error);
@@ -60,13 +60,11 @@ const Home = () => {
   return (
     <div>
       <h1>Liste des recettes</h1>
-      <button className="add" onClick={handleAdd}>Ajouter une recette</button>
+      {/* <button className="add" onClick={handleAdd}>Ajouter une recette</button> */}
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
             <p><strong>Titre :</strong> {post.title}</p>
-            <p><strong>Description :</strong> {post.description}</p>
-            <p><strong>Catégorie :</strong> {post.category}</p>
             <p><strong>Prix :</strong> {post.price}</p>
             <p><strong>Vendu :</strong> {post.isSold ? 'Oui' : 'Non'}</p>
             <p><strong>Date :</strong> {post.createdAt}</p>
@@ -77,17 +75,17 @@ const Home = () => {
                 {post.images.map((image, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:8080/uploads/${image}`} 
+                    src={`http://localhost:8082/uploads/${image}`} 
                     alt={`Image ${index + 1}`}
                     className="post-image"
                   />
                 ))}
               </div>
             )}
-            <button className="update" onClick={() => handleGet(post._id)}>Afficher</button>
+            {/* <button className="update" onClick={() => handleGet(post._id)}>Afficher</button>
 
             <button className="update" onClick={() => handleEdit(post._id)}>Modifier</button>
-            <button className="delete" onClick={() => handleDelete(post._id)}>Effacer</button>
+            <button className="delete" onClick={() => handleDelete(post._id)}>Effacer</button> */}
           </li>
         ))}
       </ul>

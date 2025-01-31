@@ -1,4 +1,6 @@
 const express = require("express");
+const authMiddleware = require("../Middleware/authMiddleware");
+const router = express.Router();
 const {
   Register,
   Login,
@@ -8,8 +10,6 @@ const {
   getUsers,
   getUser,
 } = require("../Controllers/userController");
-
-const authMiddleware = require("../Middleware/authMiddleware");
 
 const {
   createMeeting,
@@ -33,7 +33,6 @@ const {
   getConversationById,
   getUserConversations,
   deleteConversation,
-  getAllConversations
 } = require("../Controllers/conversationController");
 
 const {
@@ -47,7 +46,15 @@ const {
 
 } = require("../Controllers/messageController");
 
-const router = express.Router();
+const {
+  getAllPosts,
+  getPostById,
+  createPost,
+  updatePost,
+  deletePost
+} = require("../Controllers/postController");
+
+
 
 // Routes utilisateur
 router.post("/register", Register);
@@ -57,6 +64,13 @@ router.delete("/delete", authMiddleware, deleteUsers);
 router.delete("/delete/:id", authMiddleware, deleteUser);
 router.get("/users", authMiddleware, getUsers);
 router.get("/user/:id", authMiddleware, getUser);
+
+// Routes posts
+router.get("/posts", getAllPosts);
+router.get("/post/:id", getPostById);
+router.post("/post", createPost);
+router.put("/post/:id", updatePost);
+router.delete("/post/:id", deletePost);
 
 // Routes réunions (meetings)
 router.get("/meeting/user/:userId", authMiddleware, getMeetingsByUserId); 
@@ -74,11 +88,11 @@ router.put("/appointment/:id", authMiddleware, updateAppointment);
 router.delete("/appointment/:id", authMiddleware, deleteAppointment);
 
 // Routes conversations
-router.post("/conversation", authMiddleware, createConversation);
-router.get("/conversation/:id", authMiddleware, getConversationById);
-router.get("/conversations/user/:userId", authMiddleware, getUserConversations);
-router.delete("/conversation/:conversationId", authMiddleware, deleteConversation);
-router.get("/conversations", authMiddleware, getAllConversations);
+router.post("/conversations", authMiddleware, createConversation);
+router.get("/conversations/:id", authMiddleware, getConversationById);
+router.get("/conversations/user/:userId", authMiddleware, getUserConversations); // Route pour récupérer les conversations d'un utilisateur
+router.delete("/conversations/:id", authMiddleware, deleteConversation);
+
 
 // Routes messages
 router.get("/messages", authMiddleware, getAllMessages);
@@ -88,6 +102,5 @@ router.put("/message/:id", authMiddleware, updateMessage);
 router.delete("/message/:id", authMiddleware, deleteMessage);
 router.post("/message/send", authMiddleware, sendMessage);
 router.get("/message/:conversationId", authMiddleware, getMessages);
-
 
 module.exports = router;

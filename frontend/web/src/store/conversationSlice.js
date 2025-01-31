@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { connectWebSocket, disconnectWebSocket } from "../utils/websocket";
+import axios from "../utils/axiosConfig"; 
 
 export const fetchConversations = createAsyncThunk(
   "conversations/fetchConversations",
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8082/conversations");
+      const response = await axios.get(`/conversations/user/${userId}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -18,7 +17,7 @@ export const createConversation = createAsyncThunk(
   "conversations/createConversation",
   async (senders, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:8082/conversations", { senders });
+      const response = await axios.post("/conversations", { senders }); 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

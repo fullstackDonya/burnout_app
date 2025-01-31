@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = "http://localhost:5060/api"; 
+axios.defaults.baseURL = "http://localhost:8082"; 
 
 const setupInterceptors = (store) => {
     axios.interceptors.request.use(

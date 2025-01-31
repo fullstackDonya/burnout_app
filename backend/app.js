@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const { setupWebSocket } = require("./websocket");
+const http = require("http");
 // Import des routes
 const routes = require("./Routes/routes");
 
@@ -19,15 +20,21 @@ app.use(morgan("dev")); // Logger les requêtes
 // Connexion à MongoDB
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ Connected to MongoDB"))
+  .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
-    console.error("❌ Cannot connect to MongoDB:", err);
+    console.error("Cannot connect to MongoDB:", err);
     process.exit(1);
   });
 
-
 app.use("/", routes);
 
-app.listen(PORT, () => {
+// Créer un serveur HTTP
+const server = http.createServer(app);
+
+// Configurer le WebSocket avec le serveur HTTP
+setupWebSocket(server);
+
+// Démarrer le serveur HTTP
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
