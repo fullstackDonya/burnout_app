@@ -36,7 +36,7 @@ function App() {
             <Route path="/get_meeting/:id" element={<GetMeeting />} />
             <Route path="/conversations" element={<Conversations />} />
             <Route path="/account" element={<Account />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:conversationId" element={<Chat />} />
           </Routes>
         </BrowserRouter>
       </div>

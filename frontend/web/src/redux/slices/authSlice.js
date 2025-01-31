@@ -13,11 +13,24 @@ export const login = createAsyncThunk(
   }
 );
 
+// Récupérer les messages d'une conversation
+export const fetchMessages = createAsyncThunk(
+  "messages/fetchMessages",
+  async (conversationId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/messages/${conversationId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Erreur serveur");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    userId: null,
-    token: null,
+    userId: localStorage.getItem("userId") || null, 
+    token: localStorage.getItem("token") || null,    
     loading: false,
     error: null,
   },
@@ -25,10 +38,14 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       state.userId = action.payload.userId;
       state.token = action.payload.token;
+      localStorage.setItem("userId", action.payload.userId);  
+      localStorage.setItem("token", action.payload.token);    
     },
     logout: (state) => {
       state.userId = null;
       state.token = null;
+      localStorage.removeItem("userId");  
+      localStorage.removeItem("token");   
     },
   },
   extraReducers: (builder) => {
@@ -40,6 +57,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.userId = action.payload.userId;
         state.token = action.payload.token;
+        localStorage.setItem("userId", action.payload.userId);  
+        localStorage.setItem("token", action.payload.token);   
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

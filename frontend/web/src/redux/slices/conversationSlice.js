@@ -1,26 +1,40 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../utils/axiosConfig"; // Utiliser la configuration Axios avec les interceptors
+import axios from "../../utils/axiosConfig"; // Utiliser la config Axios
 
+// Récupérer les conversations de l'utilisateur connecté
+// Fonction pour récupérer les conversations
 export const fetchConversations = createAsyncThunk(
   "conversations/fetchConversations",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
+    const { userId, token } = getState().auth; 
+    
+    if (!userId || !token) {
+      return rejectWithValue("Utilisateur non connecté");
+    }
+
     try {
-      const response = await axios.get(`/conversation`);
+      const response = await axios.get(`/conversations`); 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || "Erreur serveur");
     }
   }
 );
 
+// Créer une conversation
 export const createConversation = createAsyncThunk(
-  "conversations/createConversation",
-  async (senders, { rejectWithValue }) => {
+  "conversations/create",
+  async ({ senders }, { rejectWithValue }) => {  
     try {
-      const response = await axios.post("/conversations", { senders }); 
+      const response = await axios.post("/conversations", { senders });
+
+      if (response.status !== 201) {
+        throw new Error("Erreur lors de la création de la conversation");
+      }
+
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || "Erreur serveur");
     }
   }
 );

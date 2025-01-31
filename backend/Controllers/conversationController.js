@@ -1,5 +1,6 @@
 const Conversation = require("../Models/conversationModel");
 const Message = require("../Models/messageModel");
+const { use } = require("../Routes/routes");
 
 const getAllConversations = async (req, res) => {
     try {
@@ -9,39 +10,26 @@ const getAllConversations = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 const createConversation = async (req, res) => {
     try {
-        const { senders, messages } = req.body;
-
-        if (!senders || senders.length === 0) {
-            return res.status(400).json({ message: "Senders are required" });
-        }
-
-        const conversation = new Conversation({ senders });
-        await conversation.save();
-
-        if (messages && messages.length > 0) {
-            for (const msg of messages) {
-                const message = new Message({
-                    conversation: conversation._id,
-                    sender: msg.sender,
-                    content: msg.content,
-                    createdAt: msg.timestamp
-                });
-                await message.save();
-                conversation.messages.push(message._id);
-            }
-            await conversation.save();
-        }
-
-        res.status(201).json(conversation);
+      const { senders, createdAt } = req.body;
+  
+      if (!senders || senders.length < 2) {
+        return res.status(400).json({ message: "Il faut au moins deux utilisateurs pour une conversation" });
+      }
+  
+      const conversation = new Conversation({ senders, createdAt });
+      await conversation.save();
+  
+      // Renvoie la conversation créée
+      res.status(201).json(conversation);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error("Erreur serveur :", error);
+      res.status(500).json({ message: error.message });
     }
 };
+  
 
-// Récupérer une conversation par ID
 const getConversationById = async (req, res) => {
     try {
         const conversation = await Conversation.findById(req.params.id).populate("senders", "name").populate("messages");
@@ -54,25 +42,28 @@ const getConversationById = async (req, res) => {
     }
 };
 
-// Récupérer toutes les conversations d'un utilisateur
 const getUserConversations = async (req, res) => {
-    console.log('====================================');
-    console.log(req.user.id);
-    console.log('====================================');
     try {
+        const userId = req.user ? req.user.id : req.params.userId;
+        
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
 
-        // Utilisez req.user.id pour obtenir l'ID de l'utilisateur authentifié
-        const conversations = await Conversation.find({ senders: req.user.id })
-
+        console.log("User ID:", userId); // Log l'ID pour vérifier
+        const conversations = await Conversation.find({ senders: userId })
             .populate("senders", "name")
             .populate("messages");
+
+        console.log("Conversations found:", conversations); // Log les conversations trouvées
         res.status(200).json(conversations);
     } catch (error) {
+        console.error("Error fetching conversations:", error); // Log de l'erreur
         res.status(500).json({ message: error.message });
     }
 };
 
-// Supprimer une conversation et ses messages associés
+
 const deleteConversation = async (req, res) => {
     try {
         const conversation = await Conversation.findById(req.params.id);

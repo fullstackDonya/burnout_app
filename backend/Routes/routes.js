@@ -38,13 +38,12 @@ const {
 } = require("../Controllers/conversationController");
 
 const {
-  getAllMessages,
   getMessageById,
   createMessage,
   updateMessage,
   deleteMessage,
   sendMessage,
-  getMessages
+  getMessagesByConversationId
 
 } = require("../Controllers/messageController");
 
@@ -93,19 +92,18 @@ router.delete("/appointment/:id", authMiddleware, deleteAppointment);
 
 // Routes conversations
 router.post("/conversations", authMiddleware, createConversation);
-router.get("/conversations", authMiddleware, getAllConversations);
+router.get("/conversations", authMiddleware, getUserConversations);
 router.get("/conversations/:id", authMiddleware, getConversationById);
-router.get("/conversation", authMiddleware, getUserConversations); // Route pour récupérer les conversations d'un utilisateur
 router.delete("/conversations/:id", authMiddleware, deleteConversation);
 
 
 // Routes messages
-router.get("/messages", authMiddleware, getAllMessages);
+
 router.get("/message/:id", authMiddleware, getMessageById);
 router.post("/message", authMiddleware, createMessage);
 router.put("/message/:id", authMiddleware, updateMessage);
 router.delete("/message/:id", authMiddleware, deleteMessage);
 router.post("/message/send", authMiddleware, sendMessage);
-router.get("/message/:conversationId", authMiddleware, getMessages);
+router.get('/messages/:conversationId', getMessagesByConversationId);
 
 module.exports = router;

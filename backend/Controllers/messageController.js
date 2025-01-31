@@ -1,4 +1,5 @@
 const Message = require("../Models/messageModel");
+const Conversation = require("../Models/conversationModel");
 
 // Envoyer un message
 const sendMessage = async (conversationId, senderId, text, wss = null) => {
@@ -40,22 +41,24 @@ const getAllMessages = async (req, res) => {
     }
 };
 
-// Récupérer les messages d'une conversation
-const getMessages = async (req, res) => {
+const getMessagesByConversationId = async (req, res) => {
+    const { conversationId } = req.params;
+  
     try {
-        const { conversationId } = req.params;
-        if (!conversationId) {
-            return res.status(400).json({ message: "L'ID de la conversation est requis." });
-        }
-
-        const messages = await Message.find({ conversation: conversationId })
-            .populate("sender", "name");
-
-        res.status(200).json(messages);
+      const conversation = await Conversation.findById(conversationId)
+        .populate('senders', 'name')
+        .populate('messages');
+  
+      if (!conversation) {
+        return res.status(404).json({ message: 'Conversation non trouvée' });
+      }
+  
+      res.status(200).json(conversation.messages);  // Retourner les messages
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
 };
+
 
 // Récupérer un seul message par ID
 const getMessageById = async (req, res) => {
@@ -129,5 +132,5 @@ module.exports = {
     updateMessage,
     deleteMessage,
     sendMessage,
-    getMessages
+    getMessagesByConversationId
 };

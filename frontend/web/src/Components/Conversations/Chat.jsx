@@ -1,32 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { connectWebSocket, sendMessage } from '../../utils/websocket';
-import { fetchMessages } from '../../redux/messageSlice';
+import { useParams } from 'react-router-dom';
+import { connectWebSocket } from '../../utils/websocket';
+import { fetchMessages, sendMessage } from '../../redux/slices/messageSlice';
+import { selectUserId } from '../../redux/selectors';
+import './Chat.css';
 
-const Chat = ({ conversationId }) => {
+const Chat = () => {
+    const { conversationId } = useParams();
     const dispatch = useDispatch();
-    const messages = useSelector((state) => state.messages[conversationId] || []);
+    const messages = useSelector((state) => state.messages.messages[conversationId] || []);
+    const userId = useSelector(selectUserId);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        connectWebSocket();
-        dispatch(fetchMessages(conversationId));
+        if (conversationId) {
+            connectWebSocket();
+            dispatch(fetchMessages(conversationId));
+        }
     }, [dispatch, conversationId]);
+
+    console.log("userId:", conversationId);
 
     const handleSendMessage = () => {
         if (message.trim()) {
-            sendMessage({ conversationId, senderId: "USER_ID", content: message });
+            dispatch(sendMessage({ conversationId, message }));
             setMessage('');
         }
     };
 
     return (
         <div>
-            <br /><br /><br /><br /><br />
+            <br />
+            <br />
+            <br /><br />
             <h2>Chat</h2>
             <div>
                 {messages.map((msg, index) => (
-                    <p key={index}><strong>{msg.sender?.name}:</strong> {msg.content}</p>
+                    <div
+                        key={index}
+                        className={`message ${msg.sender._id === userId ? 'right' : 'left'}`}
+                    >
+                        <div className="message-content">
+                            <strong>{msg.sender?.name}:</strong> {msg.content}
+                        </div>
+                    </div>
                 ))}
             </div>
             <input

@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
         // Ajouter l'utilisateur à la requête
-        req.user = decoded;  // ICI on assigne decoded à req.user au lieu de "user"
+        req.user = decoded;  
         console.log(req.user);
         next();
     } catch (error) {
