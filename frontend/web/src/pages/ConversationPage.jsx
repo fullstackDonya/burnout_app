@@ -1,7 +1,7 @@
 import React from 'react';
 import ConnectedUsers from '../Components/Users/ConnectedUsers';
 import Conversation from '../Components/Conversations/Conversations';
-import './conversation.css';
+import './css/conversation.css';
 
 const ConversationPage = () => {
     return (

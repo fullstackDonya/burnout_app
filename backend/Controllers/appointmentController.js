@@ -110,10 +110,31 @@ const deleteAppointment = async (req, res) => {
     }
 };
 
+// Get appointments for the logged-in user
+const getUserAppointments = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        const appointments = await Appointment.find({ user: userId });
+        res.status(200).json({
+            status: 'success',
+            results: appointments.length,
+            data: {
+                appointments
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err.message
+        });
+    }
+};
+
 module.exports = {
     getAllAppointments,
     createAppointment,
     getAppointment,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    getUserAppointments 
 };

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { fetchConversations, createConversation } from "../../redux/slices/conversationSlice";
 import { fetchMessages } from "../../redux/slices/messageSlice"; // Importer la fonction pour récupérer les messages
 import { selectConversations, selectUserId, selectUsers } from "../../redux/selectors";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 
 const Conversations = () => {
   const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const Conversations = () => {
       dispatch(fetchConversations());
     }
   }, [dispatch, userId]);
-  console.log("🔹 userId depuis Redux dans Conversations.js:", selectedUsers);
+  console.log("🔹 userId depuis Redux dans Conversations.js:", userId);
 
   const handleUserSelection = (id) => {
     if (id === userId) return;
@@ -53,28 +55,7 @@ const Conversations = () => {
 
   return (
     <div>
-      <h2>Conversations</h2>
-      
-      <h3>Sélectionner des utilisateurs</h3>
-      <ul>
-        {users.map((user) => (
-          <li key={user._id}>
-            <input
-              type="checkbox"
-              checked={selectedUsers.includes(user._id)}
-              onChange={() => handleUserSelection(user._id)}
-              disabled={user._id === userId}
-            />
-            {user.name} {user._id === userId && "(Vous)"}
-          </li>
-        ))}
-      </ul>
 
-      <button onClick={handleStartConversation} disabled={selectedUsers.length < 2}>
-        Commencer une nouvelle conversation
-      </button>
-
-      <h3>Conversations existantes</h3>
       <ul>
         {conversations.map((conversation) => (
           <li key={conversation._id} onClick={() => handleOpenConversation(conversation._id)}>
@@ -82,6 +63,28 @@ const Conversations = () => {
           </li>
         ))}
       </ul>
+      <div>
+        <h3>Groupe <FontAwesomeIcon icon={faPeopleGroup} /> </h3>
+            <ul>
+              {users.map((user) => (
+                <li key={user._id}>
+                  <input
+                    type="checkbox"
+                    checked={selectedUsers.includes(user._id)}
+                    onChange={() => handleUserSelection(user._id)}
+                    disabled={user._id === userId}
+                  />
+                  {user.username} {user._id === userId && "(Vous)"}
+                </li>
+              ))}
+            </ul>
+
+            <button onClick={handleStartConversation} disabled={selectedUsers.length < 2}>
+              Commencer une nouvelle conversation
+            </button>
+      </div>
+        
+
     </div>
   );
 };

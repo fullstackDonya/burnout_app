@@ -67,8 +67,8 @@ const Home = () => {
         {posts.map((post) => (
           <li key={post._id}>
             <p><strong>Titre :</strong> {post.title}</p>
-            <p><strong>Prix :</strong> {post.price}</p>
-            <p><strong>Vendu :</strong> {post.isSold ? 'Oui' : 'Non'}</p>
+            {/* <p><strong>Prix :</strong> {post.price}</p> */}
+            {/* <p><strong>Vendu :</strong> {post.isSold ? 'Oui' : 'Non'}</p> */}
             <p><strong>Date :</strong> {post.createdAt}</p>
 
             {/* Affichage des images si elles existent */}

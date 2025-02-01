@@ -12,23 +12,22 @@ const getAllConversations = async (req, res) => {
 };
 const createConversation = async (req, res) => {
     try {
-      const { senders, createdAt } = req.body;
-  
-      if (!senders || senders.length < 2) {
-        return res.status(400).json({ message: "Il faut au moins deux utilisateurs pour une conversation" });
-      }
-  
-      const conversation = new Conversation({ senders, createdAt });
-      await conversation.save();
-  
-      // Renvoie la conversation créée
-      res.status(201).json(conversation);
+        const { senders, createdAt } = req.body;
+
+        if (!senders || senders.length < 2) {
+            return res.status(400).json({ message: "Il faut au moins deux utilisateurs pour une conversation" });
+        }
+
+        const conversation = new Conversation({ senders, createdAt });
+        const savedConversation = await conversation.save();
+
+        // Renvoie la conversation créée avec son ID
+        res.status(201).json(savedConversation);
     } catch (error) {
-      console.error("Erreur serveur :", error);
-      res.status(500).json({ message: error.message });
+        console.error("Erreur serveur :", error);
+        res.status(500).json({ message: error.message });
     }
 };
-  
 
 const getConversationById = async (req, res) => {
     try {

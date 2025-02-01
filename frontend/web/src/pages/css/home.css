@@ -1,0 +1,94 @@
+/* Appliquer une police moderne et un fond élégant */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container principal */
+.home-container {
+    margin-top: 13px;
+}
+
+
+
+.highlight {
+    color: #ffcc00;
+}
+
+/* Section principale */
+.home-main {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+.intro {
+    margin-top: 50px;
+   justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Section d'introduction */
+.intro h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Bouton animé */
+.start-button {
+    background: #ffcc00;
+    color: #333;
+    font-size: 1.2rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.start-button:hover {
+    background: #ffdd44;
+    transform: scale(1.05);
+}
+
+/* Pied de page */
+.home-footer {
+    margin-top: 30px;
+    padding: 10px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Posts en lignes et colonnes */
+.home-posts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.post {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+.home-footer{
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}

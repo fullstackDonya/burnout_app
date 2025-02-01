@@ -27,7 +27,8 @@ const {
   createAppointment,
   getAppointment,
   updateAppointment,
-  deleteAppointment
+  deleteAppointment,
+  getUserAppointments 
 } = require("../Controllers/appointmentController");
 
 const {
@@ -89,6 +90,7 @@ router.post("/appointment", authMiddleware, createAppointment);
 router.get("/appointment/:id", authMiddleware, getAppointment);
 router.put("/appointment/:id", authMiddleware, updateAppointment);
 router.delete("/appointment/:id", authMiddleware, deleteAppointment);
+router.get("/appointments/user", authMiddleware, getUserAppointments);
 
 // Routes conversations
 router.post("/conversations", authMiddleware, createConversation);

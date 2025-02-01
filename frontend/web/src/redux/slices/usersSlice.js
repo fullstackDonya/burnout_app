@@ -6,7 +6,7 @@ export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/connected"); 
+      const response = await axios.get("/users"); 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Erreur serveur");

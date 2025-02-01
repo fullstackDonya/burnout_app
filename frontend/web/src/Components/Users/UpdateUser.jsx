@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./Users.css";
+import "./css/Users.css";
 
 const UpdateUser = () => {
   const [username, setUsername] = useState("");

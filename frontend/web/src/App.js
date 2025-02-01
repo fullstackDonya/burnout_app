@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import store from "./redux/store"; // Assurez-vous que le chemin est correct
 import Register from "./Components/Register/Register";
 import Login from "./Components/Login/Login";
-import Home from "./Components/Home/Home";
 import AddMeeting from "./Components/Meeting/AddMeeting";
 import EditMeeting from "./Components/Meeting/EditMeeting";
 import GetMeeting from "./Components/Meeting/GetMeeting";
@@ -16,6 +15,8 @@ import Logout from "./Components/Logout/logout";
 import  ConversationPage from "./pages/ConversationPage"; 
 import Account from "./Components/Users/Account"; 
 import Chat from "./Components/Conversations/Chat";
+import UserAppointments from "./Components/Appointments/UserAppointments";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/meeting" element={<AddMeeting />} />
             <Route path="/users" element={<Users />} />
             <Route path="/add_user" element={<AddUser />} />
@@ -37,6 +38,9 @@ function App() {
             <Route path="/conversations" element={< ConversationPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/chat/:conversationId" element={<Chat />} />
+            <Route path="/appointments" element={<UserAppointments />} />
+
+
           </Routes>
         </BrowserRouter>
       </div>

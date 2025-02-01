@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import './css/account.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Account = () => {
   const [user, setUser] = useState(null);
@@ -29,15 +32,35 @@ const Account = () => {
   }, [userId]);
 
   if (!user) {
-    return <div>Chargement...</div>;
+    return <div className="loading">Chargement...</div>;
   }
 
+  const handleNavigateToAppointments = () => {
+    navigate('/appointments');
+  };
+
+  const handleCreateAppointment = () => {
+    navigate('/appointment/new'); // Assurez-vous que cette route existe pour créer un nouveau rendez-vous
+  };
+
   return (
-    <div>
-      <h2>Mon Compte</h2>
-      <p>Nom d'utilisateur: {user.username}</p>
-      <p>Email: {user.email}</p>
-      {/* Ajoutez d'autres informations utilisateur ici */}
+    <div className="account-container">
+      <div className="account-header">
+        <h2>Mon Compte</h2>
+      </div>
+      <div className="account-info">
+        <p>Nom d'utilisateur: {user.username}</p>
+        <p>Email: {user.email}</p>
+        {/* Ajoutez d'autres informations utilisateur ici */}
+      </div>
+      <div className="account-actions">
+        <button onClick={handleNavigateToAppointments} className="appointments-button">
+          Voir mes rendez-vous
+        </button>
+        <button onClick={handleCreateAppointment} className="create-appointment-button">
+          <FontAwesomeIcon icon={faPlus} /> Nouveau rendez-vous
+        </button>
+      </div>
     </div>
   );
 };
