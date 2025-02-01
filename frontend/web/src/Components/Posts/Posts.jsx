@@ -3,9 +3,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
+import "./Posts.css";
 
-const Home = () => {
+const Posts = () => {
   const [posts, setPosts] = useState([]);
   console.log(posts);
   
@@ -66,10 +66,10 @@ const Home = () => {
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
-            <p><strong>Titre :</strong> {post.title}</p>
+            <p><strong>{post.title}</strong> </p>
             {/* <p><strong>Prix :</strong> {post.price}</p> */}
             {/* <p><strong>Vendu :</strong> {post.isSold ? 'Oui' : 'Non'}</p> */}
-            <p><strong>Date :</strong> {post.createdAt}</p>
+            <p>{post.createdAt}</p>
 
             {/* Affichage des images si elles existent */}
             {post.images && post.images.length > 0 && (
@@ -95,4 +95,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Posts;

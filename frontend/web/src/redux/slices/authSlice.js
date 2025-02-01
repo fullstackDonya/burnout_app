@@ -1,11 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../utils/axiosConfig";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from '../../utils/axiosConfig';
 
 export const login = createAsyncThunk(
-  "auth/login",
+  'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/login", credentials);
+      const response = await axios.post('/login', credentials);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('role', response.data.role);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -14,28 +17,13 @@ export const login = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk(
-  "auth/logout",
-  async (_, { rejectWithValue, getState }) => {
-    const { token } = getState().auth;
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
     try {
-      await axios.post("/logout", null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return null;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const register = createAsyncThunk(
-  "auth/register",
-  async (user, { rejectWithValue }) => {
-    try {
-      const response = await axios.post("/register", user);
-      return response.data;
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('role');
+      return true;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -43,10 +31,11 @@ export const register = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState: {
-    userId: localStorage.getItem("userId") || null,
-    token: localStorage.getItem("token") || null,
+    userId: localStorage.getItem('userId') || null,
+    token: localStorage.getItem('token') || null,
+    role: localStorage.getItem('role') || null,
     loading: false,
     error: null,
   },
@@ -54,14 +43,18 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       state.userId = action.payload.userId;
       state.token = action.payload.token;
-      localStorage.setItem("userId", action.payload.userId);
-      localStorage.setItem("token", action.payload.token);
+      state.role = action.payload.role;
+      localStorage.setItem('userId', action.payload.userId);
+      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('role', action.payload.role);
     },
     clearCredentials: (state) => {
       state.userId = null;
       state.token = null;
-      localStorage.removeItem("userId");
-      localStorage.removeItem("token");
+      state.role = null;
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
     },
   },
   extraReducers: (builder) => {
@@ -73,8 +66,10 @@ const authSlice = createSlice({
         state.loading = false;
         state.userId = action.payload.userId;
         state.token = action.payload.token;
-        localStorage.setItem("userId", action.payload.userId);
-        localStorage.setItem("token", action.payload.token);
+        state.role = action.payload.role;
+        localStorage.setItem('userId', action.payload.userId);
+        localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('role', action.payload.role);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -83,8 +78,10 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.userId = null;
         state.token = null;
-        localStorage.removeItem("userId");
-        localStorage.removeItem("token");
+        state.role = null;
+        localStorage.removeItem('userId');
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
       });
   },
 });

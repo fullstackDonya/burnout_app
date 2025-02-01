@@ -16,7 +16,12 @@ import  ConversationPage from "./pages/ConversationPage";
 import Account from "./Components/Users/Account"; 
 import Chat from "./Components/Conversations/Chat";
 import UserAppointments from "./Components/Appointments/UserAppointments";
+import CreateAppointmentForm from "./Components/Appointments/CreateAppointmentForm";
 import HomePage from "./pages/HomePage";
+import Professional from "./Components/Pro/Professional";
+import ContactPage from "./pages/ContactPage";
+import Contact from "./Components/Contacts/CreateContactForm";
+import CreateContactForm from "./Components/Contacts/CreateContactForm";
 
 function App() {
   return (
@@ -39,6 +44,10 @@ function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/chat/:conversationId" element={<Chat />} />
             <Route path="/appointments" element={<UserAppointments />} />
+            <Route path="/new_appointment" element={<CreateAppointmentForm />} />
+            <Route path="/pro" element={<Professional />} />
+            {/* <Route path="/contact" element={<ContactPage />} /> */}
+            <Route path="/contact" element={<CreateContactForm />} />
 
 
           </Routes>

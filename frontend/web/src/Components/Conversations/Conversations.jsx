@@ -6,7 +6,7 @@ import { fetchMessages } from "../../redux/slices/messageSlice"; // Importer la 
 import { selectConversations, selectUserId, selectUsers } from "../../redux/selectors";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
-
+import './css/Conversations.css';
 const Conversations = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const Conversations = () => {
   }, [dispatch, userId]);
   console.log("🔹 userId depuis Redux dans Conversations.js:", userId);
 
+ 
   const handleUserSelection = (id) => {
     if (id === userId) return;
     setSelectedUsers((prev) =>
@@ -30,6 +31,7 @@ const Conversations = () => {
   };
 
   const handleStartConversation = async () => {
+
     if (selectedUsers.length < 2) {
       alert("Sélectionnez au moins un autre utilisateur !");
       return;
@@ -54,8 +56,7 @@ const Conversations = () => {
   };
 
   return (
-    <div>
-
+    <div className="conversations-container">
       <ul>
         {conversations.map((conversation) => (
           <li key={conversation._id} onClick={() => handleOpenConversation(conversation._id)}>

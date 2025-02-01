@@ -1,6 +1,5 @@
 import React from 'react';
-import Hero from '../Components/Home/Hero';
-import Home from '../Components/Home/Home';
+import Hero from '../Components/Posts/Hero';
 import { useNavigate } from 'react-router-dom';
 import './css/home.css';
 
@@ -32,7 +31,8 @@ const HomePage = () => {
                         </div>
 
                         {/* Ajoutez plus de posts ici */}
-                        <Home />
+                        
+                  
                     </div>
 
                     <section className="intro">

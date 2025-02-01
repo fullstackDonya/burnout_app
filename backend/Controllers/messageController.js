@@ -2,35 +2,32 @@ const Message = require("../Models/messageModel");
 const Conversation = require("../Models/conversationModel");
 
 const sendMessage = async (req, res) => {
-  try {
-      const { conversationId, content } = req.body;
-      const senderId = req.user._id;  // Assurez-vous que l'utilisateur est authentifié
+    try {
+        const { sender, conversation, content } = req.body;
 
-      console.log("Sender ID:", senderId); // Ajoute ce log
+        if (!sender || !conversation || !content) {
+            return res.status(400).json({ message: "Tous les champs sont requis" });
+        }
 
-      if (!conversationId || !senderId || !content) {
-          return res.status(400).json({ message: "Tous les champs sont obligatoires." });
-      }
+        const newMessage = new Message({
+            sender,
+            conversation,
+            content,
+        });
 
-      const message = new Message({
-          conversation: conversationId,
-          sender: senderId,
-          content
-      });
+        const savedMessage = await newMessage.save();
 
-      const savedMessage = await message.save();
+        // Ajouter le message à la conversation
+        await Conversation.findByIdAndUpdate(conversation, {
+            $push: { messages: savedMessage._id }
+        });
 
-      await Conversation.findByIdAndUpdate(conversationId, {
-          $push: { messages: savedMessage._id }
-      });
-
-      res.status(201).json(savedMessage);
-  } catch (error) {
-      console.error("Erreur lors de l'envoi du message:", error);
-      res.status(500).json({ message: error.message });
-  }
+        res.status(201).json(savedMessage);
+    } catch (error) {
+        console.error("Erreur serveur :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
 };
-
 
 // Récupérer tous les messages (⚠️ Généralement, ce n'est pas recommandé en production)
 const getAllMessages = async (req, res) => {

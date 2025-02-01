@@ -1,21 +1,47 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../utils/axiosConfig";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from '../../utils/axiosConfig';
 
 // Action pour récupérer la liste des utilisateurs connectés
 export const fetchUsers = createAsyncThunk(
-  "users/fetchUsers",
+  'users/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/users"); 
+      const response = await axios.get('/users');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Erreur serveur");
+      return rejectWithValue(error.response?.data || 'Erreur serveur');
     }
   }
 );
 
+export const fetchProfessionalUsers = createAsyncThunk(
+  'users/fetchProfessionalUsers',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/users');
+      const professionalRoles = ['psychologue', 'médecin', 'coach en gestion du stress', 'thérapeute'];
+      const professionalUsers = response.data.filter(user => 
+        professionalRoles.includes(user.role) && user.role !== 'user' && user.role !== 'admin' && user.role
+      );
+      return professionalUsers;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const register = createAsyncThunk(
+  "auth/register",
+  async (user, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/register", user);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 const usersSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState: {
     list: [],
     loading: false,
@@ -32,6 +58,17 @@ const usersSlice = createSlice({
         state.list = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchProfessionalUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchProfessionalUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload;
+      })
+      .addCase(fetchProfessionalUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

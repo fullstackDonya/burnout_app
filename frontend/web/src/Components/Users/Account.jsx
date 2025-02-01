@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 import './css/account.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -40,8 +39,8 @@ const Account = () => {
   };
 
   const handleCreateAppointment = () => {
-    navigate('/appointment/new'); // Assurez-vous que cette route existe pour créer un nouveau rendez-vous
-  };
+    navigate('/new_appointment'); 
+  }
 
   return (
     <div className="account-container">
@@ -51,7 +50,7 @@ const Account = () => {
       <div className="account-info">
         <p>Nom d'utilisateur: {user.username}</p>
         <p>Email: {user.email}</p>
-        {/* Ajoutez d'autres informations utilisateur ici */}
+        <p>Role: {user.role}</p>
       </div>
       <div className="account-actions">
         <button onClick={handleNavigateToAppointments} className="appointments-button">

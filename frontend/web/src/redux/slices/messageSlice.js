@@ -3,7 +3,7 @@ import axios from "../../utils/axiosConfig";
 
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
-  async (conversationId, { getState, rejectWithValue }) => {  // Passer conversationId comme argument
+  async (conversationId, { getState, rejectWithValue }) => {
     const { userId, token } = getState().auth;
 
     if (!userId || !token) {
@@ -11,10 +11,9 @@ export const fetchMessages = createAsyncThunk(
     }
 
     try {
-      // Passer conversationId dans l'URL de l'API
       const response = await axios.get(`/messages/${conversationId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,  // Utiliser le token d'authentification
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -25,14 +24,13 @@ export const fetchMessages = createAsyncThunk(
   }
 );
 
-
-
 export const sendMessage = createAsyncThunk(
   "messages/sendMessage",
   async ({ sender, conversation, content }, { rejectWithValue, getState }) => {
     try {
       const { auth } = getState();
-      const response = await axios.post(`/message`, { sender, conversation, content }, {
+      // const response = await axios.post(`/message`, { sender, conversation, content }, {
+      const response = await axios.post(`/send`, { sender, conversation, content }, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           'Content-Type': 'application/json'

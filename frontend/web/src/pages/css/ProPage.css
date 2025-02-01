@@ -1,0 +1,15 @@
+.pro-content {
+    margin-top: 100px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 768px) {
+    .pro-content {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

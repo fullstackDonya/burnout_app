@@ -29,11 +29,10 @@ const UserAppointments = () => {
           <li key={appointment._id}>
             <p>Date : {new Date(appointment.date).toLocaleString()}</p>
             <p>Description : {appointment.description}</p>
-            {/* Ajoutez d'autres informations sur le rendez-vous ici */}
           </li>
         ))}
       </ul>
-      <CreateAppointmentForm />
+      
     </div>
   );
 };

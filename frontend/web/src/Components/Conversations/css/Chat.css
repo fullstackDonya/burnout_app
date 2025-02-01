@@ -1,4 +1,7 @@
 /* Style principal pour le container de chaque message */
+.chat-container {
+   margin-top: 170px;
+}
 .message {
     display: flex;
     align-items: center;

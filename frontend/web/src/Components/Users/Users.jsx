@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./css/Users.css";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  // const userRole = useSelector((state) => state.auth.role); 
+
 
   useEffect(() => {
     axios
@@ -42,14 +45,17 @@ const Users = () => {
         .then(() => {
           alert("Utilisateur supprimé avec succès !");
           // Mettre à jour la liste des utilisateurs après suppression
-          setUsers(users.filter((user) => user._id !== id)); // Assurez-vous que la clé est '_id' pour MongoDB
+          setUsers(users.filter((user) => user._id !== id)); 
         })
         .catch((error) => {
           console.error("Erreur lors de la suppression :", error);
         });
     }
   };
-
+  // vérification du rôle de l'utilisateur si Non admin ne peut pas voir la page
+  // if (userRole !== 'admin') {
+  //   return <div>Vous n'êtes pas autorisé à voir cette page.</div>;
+  // }
   return (
     <div>
       <h1>Liste des Utilisateurs</h1>

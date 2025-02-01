@@ -7,7 +7,7 @@ table {
   }
   
   thead tr {
-    background-color: #f4f4f4; 
+ /*  */
     border-bottom: 2px solid #ddd; 
   }
   
@@ -20,9 +20,9 @@ table {
     border-bottom: 1px solid #ddd;
   }
   
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9; 
-  }
+  /* tbody tr:nth-child(even) {
+  
+  } */
   
   td {
     padding: 10px 15px; 

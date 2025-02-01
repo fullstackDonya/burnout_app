@@ -56,7 +56,13 @@ const {
   deletePost
 } = require("../Controllers/postController");
 
-
+const {
+  createContact,
+  getAllContacts,
+  getContact,
+  updateContact,
+  deleteContact
+} = require("../Controllers/contactController");
 
 // Routes utilisateur
 router.post("/register", Register);
@@ -68,6 +74,13 @@ router.get("/users", authMiddleware, getUsers);
 router.get("/user/:id", authMiddleware, getUser);
 router.get("/logout", authMiddleware, Logout);
 router.get("/connected", authMiddleware, getConnectedUsers);
+
+// Routes contacts
+router.post("/contact", authMiddleware, createContact);
+router.get("/contacts", authMiddleware, getAllContacts);
+router.get("/contact/:id", authMiddleware, getContact);
+router.put("/contact/:id", authMiddleware, updateContact);
+router.delete("/contact/:id", authMiddleware, deleteContact);
 
 // Routes posts
 router.get("/posts", getAllPosts);
