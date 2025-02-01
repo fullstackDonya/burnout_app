@@ -2,7 +2,7 @@ const User = require("../Models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-
+const connectedUsers = {};
 dotenv.config();
 const Register = async (req, res) => {
   try {
@@ -132,10 +132,30 @@ const getUser = async (req, res) => {
 
 const Logout = (req, res) => {
   try {
+    // Retirer l'utilisateur de la liste des utilisateurs connectés
+    if (req.user && req.user.id) {
+      delete connectedUsers[req.user.id];
+    }
+
     req.user = null; // Clear the user information from the request
     res.status(200).send({ message: "Déconnecté avec succès" });
   } catch (error) {
     res.status(500).send({ message: "Erreur serveur : " + error.message });
   }
 };
-module.exports = { Register, Login, updateUser, deleteUser, getUsers, getUser, deleteUsers, Logout };
+
+const getConnectedUsers = async (req, res) => {
+  try {
+    // Convertir l'objet connectedUsers en tableau
+    const users = Object.values(connectedUsers).map(user => ({
+      id: user._id,
+      username: user.username,
+      email: user.email
+    }));
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+module.exports = { Register, Login, updateUser, deleteUser, getUsers, getUser, deleteUsers, Logout, getConnectedUsers };

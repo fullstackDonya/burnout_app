@@ -1,19 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
-import webSocketMiddleware from './webSocketMiddleware';
-import collaborationReducer from './collaborationSlice';
+import conversationReducer from './slices/conversationSlice';
+import messageReducer from './slices/messageSlice';
+import authReducer from './slices/authSlice';
+import usersReducer from './slices/usersSlice';
 
 const store = configureStore({
-    reducer: {
-        rootReducer,
-        collaborations: collaborationReducer,
-    },
-    devTools: process.env.NODE_ENV !== 'production',
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }).concat(thunk, webSocketMiddleware),
+  reducer: {
+    conversations: conversationReducer,
+    messages: messageReducer,
+    auth: authReducer,
+    users: usersReducer
+  },
 });
 
 export default store;

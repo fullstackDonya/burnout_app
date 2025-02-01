@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchConnectedUsers } from '../redux/slices/UsersSlice';
+import { fetchUsers } from '../../redux/slices/usersSlice';
 
 const ConnectedUsers = () => {
     const dispatch = useDispatch();
-    const connectedUsers = useSelector((state) => state.connectedUsers.users);
-    const loading = useSelector((state) => state.connectedUsers.loading);
-    const error = useSelector((state) => state.connectedUsers.error);
+    const connectedUsers = useSelector((state) => state.users.list);
+    const loading = useSelector((state) => state.users.loading);
+    const error = useSelector((state) => state.users.error);
 
     useEffect(() => {
-        dispatch(fetchConnectedUsers());
+        dispatch(fetchUsers());
     }, [dispatch]);
 
     if (loading) {

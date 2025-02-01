@@ -20,20 +20,18 @@ const Chat = () => {
         }
     }, [dispatch, conversationId]);
 
-    console.log("userId:", conversationId);
+    console.log("🔹 userId dans Chat.js:", userId); // Vérifie si userId est bien défini
 
     const handleSendMessage = () => {
+        console.log("🔹 Envoi du message:", { conversationId, userId, message });
         if (message.trim()) {
-            dispatch(sendMessage({ conversationId, message }));
+            dispatch(sendMessage({ sender: userId, conversation: conversationId, content: message }));
             setMessage('');
         }
     };
 
     return (
         <div>
-            <br />
-            <br />
-            <br /><br />
             <h2>Chat</h2>
             <div>
                 {messages.map((msg, index) => (
@@ -56,5 +54,6 @@ const Chat = () => {
         </div>
     );
 };
+
 
 export default Chat;

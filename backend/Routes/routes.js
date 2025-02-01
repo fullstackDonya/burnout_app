@@ -9,7 +9,8 @@ const {
   deleteUser,
   getUsers,
   getUser,
-  Logout
+  Logout,
+  getConnectedUsers
 } = require("../Controllers/userController");
 
 const {
@@ -34,7 +35,6 @@ const {
   getConversationById,
   getUserConversations,
   deleteConversation,
-  getAllConversations
 } = require("../Controllers/conversationController");
 
 const {
@@ -66,7 +66,7 @@ router.delete("/delete/:id", authMiddleware, deleteUser);
 router.get("/users", authMiddleware, getUsers);
 router.get("/user/:id", authMiddleware, getUser);
 router.get("/logout", authMiddleware, Logout);
-
+router.get("/connected", authMiddleware, getConnectedUsers);
 
 // Routes posts
 router.get("/posts", getAllPosts);
@@ -98,12 +98,11 @@ router.delete("/conversations/:id", authMiddleware, deleteConversation);
 
 
 // Routes messages
-
 router.get("/message/:id", authMiddleware, getMessageById);
 router.post("/message", authMiddleware, createMessage);
 router.put("/message/:id", authMiddleware, updateMessage);
 router.delete("/message/:id", authMiddleware, deleteMessage);
-router.post("/message/send", authMiddleware, sendMessage);
+router.post("/send", authMiddleware, sendMessage);
 router.get('/messages/:conversationId', getMessagesByConversationId);
 
 module.exports = router;

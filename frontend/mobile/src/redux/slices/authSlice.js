@@ -1,56 +1,96 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from '../../utils/axiosConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/login', credentials);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue, getState }) => {
+    const { token } = getState().auth;
+    try {
+      await axios.post('/logout', null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return null;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const register = createAsyncThunk(
+  'auth/register',
+  async (user, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/register', user);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
-    isAuthenticated: false,
-    user: null,
-    status: 'idle',
-    error: null,
+  userId: null,
+  token: null,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {
-        loginStart(state) {
-            state.loading = true;
-            state.error = null;
-        },
-        loginSuccess(state, action) {
-            state.loading = false;
-            state.isAuthenticated = true;
-            state.user = action.payload;
-        },
-        loginFailure(state, action) {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        logout(state) {
-            state.isAuthenticated = false;
-            state.user = null;
-        },
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (state, action) => {
+      state.userId = action.payload.userId;
+      state.token = action.payload.token;
+      AsyncStorage.setItem('userId', action.payload.userId);
+      AsyncStorage.setItem('token', action.payload.token);
     },
-    reducers: {},
-    extraReducers: (builder) =>{
-        builder.addCase(loginStart, (state) => {
-            state.loading = true;
-            state.error = null;
-        });
-        builder.addCase(loginSuccess, (state, action) => {
-            state.loading = false;
-            state.isAuthenticated = true;
-            state.user = action.payload;
-        });
-        builder.addCase(loginFailure, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-        });
-        builder.addCase(logout, (state) => {
-            state.isAuthenticated = false;
-            state.user = null;
-        });
+    clearCredentials: (state) => {
+      state.userId = null;
+      state.token = null;
+      AsyncStorage.removeItem('userId');
+      AsyncStorage.removeItem('token');
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(login.fulfilled, async (state, action) => {
+        state.loading = false;
+        state.userId = action.payload.userId;
+        state.token = action.payload.token;
+        await AsyncStorage.setItem('userId', action.payload.userId);
+        await AsyncStorage.setItem('token', action.payload.token);
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(logout.fulfilled, async (state) => {
+        state.userId = null;
+        state.token = null;
+        await AsyncStorage.removeItem('userId');
+        await AsyncStorage.removeItem('token');
+      });
+  },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
-
+export const { setCredentials, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;

@@ -13,7 +13,7 @@ import AddUser from "./Components/Users/AddUser";
 import UpdateUser from "./Components/Users/UpdateUser";
 import Navbar from "./Components/Navbar/Navbar"; 
 import Logout from "./Components/Logout/logout";
-import Conversations from "./Components/Conversations/Conversations"; 
+import  ConversationPage from "./pages/ConversationPage"; 
 import Account from "./Components/Users/Account"; 
 import Chat from "./Components/Conversations/Chat";
 
@@ -34,7 +34,7 @@ function App() {
             <Route path="/edit_user/:id" element={<UpdateUser />} />
             <Route path="/edit_meeting/:id" element={<EditMeeting />} />
             <Route path="/get_meeting/:id" element={<GetMeeting />} />
-            <Route path="/conversations" element={<Conversations />} />
+            <Route path="/conversations" element={< ConversationPage />} />
             <Route path="/account" element={<Account />} />
             <Route path="/chat/:conversationId" element={<Chat />} />
           </Routes>

@@ -6,7 +6,7 @@ export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/users/online"); // Mets l'URL correcte
+      const response = await axios.get("/connected"); 
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Erreur serveur");

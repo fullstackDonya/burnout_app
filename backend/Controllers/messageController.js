@@ -1,35 +1,36 @@
 const Message = require("../Models/messageModel");
 const Conversation = require("../Models/conversationModel");
 
-// Envoyer un message
-const sendMessage = async (conversationId, senderId, text, wss = null) => {
-    try {
-        if (!conversationId || !senderId || !text) {
-            throw new Error("Tous les champs sont obligatoires.");
-        }
+const sendMessage = async (req, res) => {
+  try {
+      const { conversationId, content } = req.body;
+      const senderId = req.user._id;  // Assurez-vous que l'utilisateur est authentifié
 
-        const message = new Message({
-            conversation: conversationId,
-            sender: senderId,
-            content: text
-        });
+      console.log("Sender ID:", senderId); // Ajoute ce log
 
-        const savedMessage = await message.save();
+      if (!conversationId || !senderId || !content) {
+          return res.status(400).json({ message: "Tous les champs sont obligatoires." });
+      }
 
-        // Diffuser le message en temps réel via WebSocket
-        if (wss) {
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify(savedMessage));
-                }
-            });
-        }
+      const message = new Message({
+          conversation: conversationId,
+          sender: senderId,
+          content
+      });
 
-        return savedMessage;
-    } catch (error) {
-        throw new Error(error.message);
-    }
+      const savedMessage = await message.save();
+
+      await Conversation.findByIdAndUpdate(conversationId, {
+          $push: { messages: savedMessage._id }
+      });
+
+      res.status(201).json(savedMessage);
+  } catch (error) {
+      console.error("Erreur lors de l'envoi du message:", error);
+      res.status(500).json({ message: error.message });
+  }
 };
+
 
 // Récupérer tous les messages (⚠️ Généralement, ce n'est pas recommandé en production)
 const getAllMessages = async (req, res) => {
@@ -74,22 +75,27 @@ const getMessageById = async (req, res) => {
 };
 
 // Créer un nouveau message
-const createMessage = async (req, res) => {
+const createMessage  = async (req, res) => {
     try {
-        const { conversation, sender, content } = req.body;
-
-        if (!conversation || !sender || !content) {
+        const { sender, conversation, content} = req.body;
+    
+     
+        if (!sender || !conversation || !content) {
             return res.status(400).json({ message: "Tous les champs sont obligatoires." });
         }
-
-        const newMessage = new Message(req.body);
-        await newMessage.save();
-
-        res.status(201).json(newMessage);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+      
+          const message = new Message({ sender, conversation, content });
+          await message.save();
+      
+          // Renvoie la message créée
+          res.status(201).json(message);
+        } catch (error) {
+          console.error("Erreur serveur :", error);
+          res.status(500).json({ message: error.message });
+        }
 };
+
+
 
 // Mettre à jour un message
 const updateMessage = async (req, res) => {

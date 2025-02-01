@@ -18,6 +18,7 @@ const Conversations = () => {
       dispatch(fetchConversations());
     }
   }, [dispatch, userId]);
+  console.log("🔹 userId depuis Redux dans Conversations.js:", selectedUsers);
 
   const handleUserSelection = (id) => {
     if (id === userId) return;

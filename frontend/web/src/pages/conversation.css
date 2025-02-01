@@ -1,0 +1,40 @@
+.conversation-page {
+    margin-top: 77px;
+  display: flex;
+  height: 100vh;
+}
+
+.connected-users-section {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.conversation-section {
+  flex: 2;
+  overflow-y: auto;
+}
+
+.section-container {
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.list-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.list-item:hover {
+  background-color: #f0f0f0;
+}
