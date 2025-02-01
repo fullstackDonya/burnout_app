@@ -1,16 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Posts.css";
+
 const Hero = () => {
   return (
-    
     <section className="hero">
       <header className="home-header">
-                          
-                      
         <div className="hero-content">
-        <h1>Bienvenue sur l'Appli RebootMind</h1>
+          <h1>Bienvenue sur l'Appli RebootMind</h1>
           <p>Connectez-vous avec des professionnels pour vous accompagner.</p>
-          <button className="btn-primary">Découvrir</button>
+          <Link to="/contact" className="btn-primary">Découvrir</Link>
         </div>
       </header>
     </section>

@@ -32,6 +32,7 @@ const Navbar = () => {
         <li><Link to="/" onClick={() => setMenuOpen(false)}>Accueil</Link></li>
         <li><Link to="/conversations" onClick={() => setMenuOpen(false)}>Conversations</Link></li>
         <li><Link to="/account" onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
+        <li><Link to="/pro" onClick={() => setMenuOpen(false)}>Professionnels</Link></li>
         <li><Link to="/users" onClick={() => setMenuOpen(false)}>Gestion des Utilisateurs</Link></li>
 
         {isAuthenticated ? (
