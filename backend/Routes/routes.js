@@ -64,30 +64,55 @@ const {
   deleteContact
 } = require("../Controllers/contactController");
 
+const {
+  submitDiagnostic
+} = require("../Controllers/DiagnosticController");
+
+
+const {
+  getQuestions,
+  getQuestionById,
+  createQuestion,
+  updateQuestion,
+  deleteQuestion
+}= require ("../Controllers/questionController");
+
 // Routes utilisateur
 router.post("/register", Register);
 router.post("/login", Login);
 router.put("/update/:id", authMiddleware, updateUser);
 router.delete("/delete", authMiddleware, deleteUsers);
 router.delete("/delete/:id", authMiddleware, deleteUser);
-router.get("/users", authMiddleware, getUsers);
+router.get("/users", getUsers);
 router.get("/user/:id", authMiddleware, getUser);
 router.get("/logout", authMiddleware, Logout);
 router.get("/connected", authMiddleware, getConnectedUsers);
 
+// Routes diagnostics
+// Route pour soumettre les réponses
+router.post('/submit', submitDiagnostic);
+
+// Routes questions 
+router.get('/questions', getQuestions);
+router.get('/question/:id', getQuestionById);
+router.post('/question', authMiddleware, createQuestion);
+router.put('/question/:id', authMiddleware, updateQuestion);
+router.delete('/question/:id', authMiddleware, deleteQuestion);
+
+
 // Routes contacts
-router.post("/contact", authMiddleware, createContact);
+router.post("/contact", createContact);
 router.get("/contacts", authMiddleware, getAllContacts);
-router.get("/contact/:id", authMiddleware, getContact);
+router.get("/contact/:id", getContact);
 router.put("/contact/:id", authMiddleware, updateContact);
 router.delete("/contact/:id", authMiddleware, deleteContact);
 
 // Routes posts
 router.get("/posts", getAllPosts);
 router.get("/post/:id", getPostById);
-router.post("/post", createPost);
-router.put("/post/:id", updatePost);
-router.delete("/post/:id", deletePost);
+router.post("/post", authMiddleware, createPost);
+router.put("/post/:id",authMiddleware,  updatePost);
+router.delete("/post/:id",authMiddleware, deletePost);
 
 // Routes réunions (meetings)
 router.get("/meeting/user/:userId", authMiddleware, getMeetingsByUserId); 

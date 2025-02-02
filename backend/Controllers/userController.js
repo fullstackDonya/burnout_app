@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const connectedUsers = {};
 dotenv.config();
+
 const Register = async (req, res) => {
   try {
     console.log("body", req.body);
@@ -16,8 +17,12 @@ const Register = async (req, res) => {
 
     const user = new User({
       username: req.body.username,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       password: hashedPassword,
       email: req.body.email,
+      age: req.body.age || null, 
+      role: req.body.role || null,
     });
 
     await user.save();
@@ -30,29 +35,39 @@ const Register = async (req, res) => {
 
 const Login = async (req, res) => {
   try {
+    console.log("Données reçues :", req.body);
+
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(404).send("Utilisateur introuvable");
+      return res.status(404).json({ message: "Utilisateur introuvable" });
     }
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send("Mot de passe incorrect");
+      return res.status(400).json({ message: "Mot de passe incorrect" });
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email }, // payload : chargement des données à transporter
-      process.env.JWT_SECRET, // clé secrète pour protéger le token
-      { expiresIn: process.env.JWT_EXPIRES_IN } // les options du token, en locurrence la durée de validité
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    res.status(200).send({ message: "Connecté", token });
+    console.log("Utilisateur trouvé :", user); // Vérifier que user est bien récupéré
+    console.log("ID utilisateur envoyé :", user.id);
+
+    res.status(200).json({ 
+      message: "Connecté", 
+      token,
+      user: { id: user.id, email: user.email, role: user.role } // Assure-toi d'envoyer user
+    });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 const updateUser = async (req, res) => {
   try {

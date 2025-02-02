@@ -6,13 +6,13 @@ const MyAxios = axios.create({
 
 MyAxios.interceptors.request.use((request) => {
 	const token = localStorage.getItem("token");
-	console.log("token envoyer", token);
+	// console.log("token envoyer", token);
 	if (token) {
 		request.headers.Authorization = `Bearer ${token}`;
 	}
-  console.log('====================================');
-  console.log(token);
-  console.log('====================================');
+//   console.log('====================================');
+//   console.log(token);
+//   console.log('====================================');
 	return request;
 });
 

@@ -18,13 +18,20 @@ import Chat from "./Components/Conversations/Chat";
 import UserAppointments from "./Components/Appointments/UserAppointments";
 import CreateAppointmentForm from "./Components/Appointments/CreateAppointmentForm";
 import HomePage from "./pages/HomePage";
+import ProPage from "./pages/ProPage";
 import Professional from "./Components/Pro/Professional";
 import ContactPage from "./pages/ContactPage";
 import Contact from "./Components/Contacts/CreateContactForm";
 import CreateContactForm from "./Components/Contacts/CreateContactForm";
+import Footer from "./Components/Footer/Footer";
+import Questionnaire from './Components/Diagnostics/Questionnaire';
+
+
 
 function App() {
+  
   return (
+
     <Provider store={store}>
       <div className="App">
         <BrowserRouter>
@@ -45,16 +52,17 @@ function App() {
             <Route path="/chat/:conversationId" element={<Chat />} />
             <Route path="/appointments" element={<UserAppointments />} />
             <Route path="/new_appointment" element={<CreateAppointmentForm />} />
-            <Route path="/pro" element={<Professional />} />
+            <Route path="/pro" element={<ProPage />} />
+            <Route path="/chat" element={<Chat />} />
             {/* <Route path="/contact" element={<ContactPage />} /> */}
             <Route path="/contact" element={<CreateContactForm />} />
-
-
+            <Route path="/questionnaire" element={<Questionnaire />} />
+  
           </Routes>
+          <Footer />
         </BrowserRouter>
       </div>
     </Provider>
   );
 }
-
 export default App;

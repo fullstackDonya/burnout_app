@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchConversations, createConversation } from "../../redux/slices/conversationSlice";
+import { fetchConversations, createConversation, setSelectedConversationId } from "../../redux/slices/conversationSlice";
 import { fetchMessages } from "../../redux/slices/messageSlice"; // Importer la fonction pour récupérer les messages
 import { selectConversations, selectUserId, selectUsers } from "../../redux/selectors";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import './css/Conversations.css';
+
 const Conversations = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ const Conversations = () => {
   }, [dispatch, userId]);
   console.log("🔹 userId depuis Redux dans Conversations.js:", userId);
 
- 
   const handleUserSelection = (id) => {
     if (id === userId) return;
     setSelectedUsers((prev) =>
@@ -31,7 +31,6 @@ const Conversations = () => {
   };
 
   const handleStartConversation = async () => {
-
     if (selectedUsers.length < 2) {
       alert("Sélectionnez au moins un autre utilisateur !");
       return;
@@ -43,7 +42,8 @@ const Conversations = () => {
           console.error("Erreur : ID de la conversation non trouvé");
           return;
         }
-        navigate(`/chat/${response.payload._id}`);
+        dispatch(setSelectedConversationId(response.payload._id)); // Définir l'ID de la conversation sélectionnée dans le store Redux
+        navigate(`/chat`);
       })
       .catch((error) => {
         console.error("Erreur lors de la création de la conversation", error);
@@ -51,8 +51,9 @@ const Conversations = () => {
   };
 
   const handleOpenConversation = (conversationId) => {
+    dispatch(setSelectedConversationId(conversationId)); // Définir l'ID de la conversation sélectionnée dans le store Redux
     dispatch(fetchMessages(conversationId)); // Charger les messages avant d'afficher la conversation
-    navigate(`/chat/${conversationId}`);
+    navigate(`/chat`);
   };
 
   return (
@@ -66,26 +67,23 @@ const Conversations = () => {
       </ul>
       <div>
         <h3>Groupe <FontAwesomeIcon icon={faPeopleGroup} /> </h3>
-            <ul>
-              {users.map((user) => (
-                <li key={user._id}>
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers.includes(user._id)}
-                    onChange={() => handleUserSelection(user._id)}
-                    disabled={user._id === userId}
-                  />
-                  {user.username} {user._id === userId && "(Vous)"}
-                </li>
-              ))}
-            </ul>
-
-            <button onClick={handleStartConversation} disabled={selectedUsers.length < 2}>
-              Commencer une nouvelle conversation
-            </button>
+        <ul>
+          {users.map((user) => (
+            <li key={user._id}>
+              <input
+                type="checkbox"
+                checked={selectedUsers.includes(user._id)}
+                onChange={() => handleUserSelection(user._id)}
+                disabled={user._id === userId}
+              />
+              {user.username} {user._id === userId && "(Vous)"}
+            </li>
+          ))}
+        </ul>
+        <button onClick={handleStartConversation} disabled={selectedUsers.length < 2}>
+          Commencer une nouvelle conversation
+        </button>
       </div>
-        
-
     </div>
   );
 };

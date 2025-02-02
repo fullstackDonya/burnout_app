@@ -1,13 +1,15 @@
 import React from 'react';
-import Hero from '../Components/Posts/Hero';
+import Hero from './../Components/Posts/Hero';
 import { useNavigate } from 'react-router-dom';
+import Posts from '../Components/Posts/Posts'
+import Professional from "./../Components/Pro/Professional";
 import './css/home.css';
 
 const HomePage = () => {
     const navigate = useNavigate();
 
     const handleStart = () => {
-        navigate('/home'); // Remplacez '/home' par la route vers laquelle vous souhaitez naviguer
+        navigate('/questionnaire'); 
     };
 
     return (
@@ -31,21 +33,20 @@ const HomePage = () => {
                         </div>
 
                         {/* Ajoutez plus de posts ici */}
-                        
+                        <Posts />
+                        <Professional />
                   
                     </div>
 
                     <section className="intro">
                         <h2>Prendre soin de vous</h2>
                         <p>Cette application est conçue pour vous aider à gérer le stress et à retrouver votre équilibre.</p>
-                        <button className="start-button" onClick={handleStart}>Commencer</button>
+                        <button className="start-button" onClick={handleStart}>Commencer votre diagnostic</button>
 
                     </section>
                 </main>
             </div>
-            <footer className="home-footer">
-                <p>&copy; 2023 Appli Burn Out. Tous droits réservés.</p>
-            </footer>
+          
         </div>
     );
 };

@@ -29,7 +29,6 @@ export const sendMessage = createAsyncThunk(
   async ({ sender, conversation, content }, { rejectWithValue, getState }) => {
     try {
       const { auth } = getState();
-      // const response = await axios.post(`/message`, { sender, conversation, content }, {
       const response = await axios.post(`/send`, { sender, conversation, content }, {
         headers: {
           Authorization: `Bearer ${auth.token}`,

@@ -61,13 +61,6 @@ body {
     transform: scale(1.05);
 }
 
-/* Pied de page */
-.home-footer {
-    margin-top: 30px;
-    padding: 10px;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
 
 /* Posts en lignes et colonnes */
 .home-posts {
@@ -84,11 +77,4 @@ body {
     padding: 20px;
     width: 300px;
     text-align: center;
-}
-.home-footer{
-    text-align: center;
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 0.9rem;
-    opacity: 0.8;
 }

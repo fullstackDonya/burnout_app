@@ -1,27 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import Logout from "../Logout/logout"; 
-import "./Navbar.css"; 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Logout from '../Logout/logout';
+import './Navbar.css';
 
 const Navbar = () => {
-  const isAuthenticated = useSelector((state) => state.auth.token !== null);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const isAuthenticated = useSelector((state) => state.auth.token !== null);
 
   return (
     <nav className="navbar">
-      {/* LOGO */}
+
       <div className="navbar-logo">
         {/* <img src="/logo.svg" alt="Logo" /> */}
         <h3>RebootMind</h3>
       </div>
-
-      {/* MENU BURGER */}
-      <div className={`navbar-toggle ${menuOpen ? "active" : ""}`} onClick={toggleMenu}>
+      <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>
         <span></span>
         <span></span>
@@ -30,10 +24,15 @@ const Navbar = () => {
       {/* NAVIGATION LINKS */}
       <ul className={`navbar-links ${menuOpen ? "active" : ""}`}>
         <li><Link to="/" onClick={() => setMenuOpen(false)}>Accueil</Link></li>
-        <li><Link to="/conversations" onClick={() => setMenuOpen(false)}>Conversations</Link></li>
-        <li><Link to="/account" onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
+        {isAuthenticated && (
+          <>
+            <li><Link to="/conversations" onClick={() => setMenuOpen(false)}>Conversations</Link></li>
+            <li><Link to="/account" onClick={() => setMenuOpen(false)}>Mon Compte</Link></li>
+          </>
+        )}
         <li><Link to="/pro" onClick={() => setMenuOpen(false)}>Professionnels</Link></li>
-        <li><Link to="/users" onClick={() => setMenuOpen(false)}>Gestion des Utilisateurs</Link></li>
+        <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+        {/* <li><Link to="/users" onClick={() => setMenuOpen(false)}>Gestion des Utilisateurs</Link></li> */}
 
         {isAuthenticated ? (
           <li><Logout /></li>

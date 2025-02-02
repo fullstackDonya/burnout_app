@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../utils/axiosConfig"; // Utiliser la config Axios
 
 // Récupérer les conversations de l'utilisateur connecté
-// Fonction pour récupérer les conversations
 export const fetchConversations = createAsyncThunk(
   "conversations/fetchConversations",
   async (_, { getState, rejectWithValue }) => {
@@ -13,7 +12,11 @@ export const fetchConversations = createAsyncThunk(
     }
 
     try {
-      const response = await axios.get(`/conversations`); 
+      const response = await axios.get(`/conversations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Erreur serveur");
@@ -24,9 +27,15 @@ export const fetchConversations = createAsyncThunk(
 // Créer une conversation
 export const createConversation = createAsyncThunk(
   "conversations/create",
-  async ({ senders }, { rejectWithValue }) => {  
+  async ({ senders }, { getState, rejectWithValue }) => {  
+    const { token } = getState().auth;
+
     try {
-      const response = await axios.post("/conversations", { senders });
+      const response = await axios.post("/conversations", { senders }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.status !== 201) {
         throw new Error("Erreur lors de la création de la conversation");
@@ -43,10 +52,14 @@ const conversationSlice = createSlice({
   name: "conversations",
   initialState: {
     conversations: [],
+    selectedConversationId: null,
     loading: false,
     error: null,
   },
   reducers: {
+    setSelectedConversationId: (state, action) => {
+      state.selectedConversationId = action.payload;
+    },
     addMessageToConversation: (state, action) => {
       const { conversationId, message } = action.payload;
       const conversation = state.conversations.find(conv => conv._id === conversationId);
@@ -70,9 +83,10 @@ const conversationSlice = createSlice({
       })
       .addCase(createConversation.fulfilled, (state, action) => {
         state.conversations.push(action.payload);
+        state.selectedConversationId = action.payload._id;
       });
   },
 });
 
-export const { addMessageToConversation } = conversationSlice.actions;
+export const { setSelectedConversationId, addMessageToConversation } = conversationSlice.actions;
 export default conversationSlice.reducer;

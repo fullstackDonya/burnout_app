@@ -26,6 +26,15 @@ export const connectWebSocket = () => {
   };
 };
 
+export const sendWebSocketMessage = (message) => {
+  if (socket && socket.readyState === WebSocket.OPEN) { 
+    console.log("Envoi du message via WebSocket:", message);
+    socket.send(JSON.stringify(message));
+  } else {
+    console.error("WebSocket n'est pas connecté");
+  }
+};
+
 export const sendMessage = (message) => {
   if (socket && socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(message));

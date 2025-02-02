@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const Message = require('./Models/messageModel'); 
+const Conversation = require('./Models/conversationModel');
 
 function setupWebSocket(server) {
     const wss = new WebSocket.Server({ server });
