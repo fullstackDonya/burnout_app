@@ -29,6 +29,9 @@ const UserAppointments = () => {
           <li key={appointment._id}>
             <p>Date : {new Date(appointment.date).toLocaleString()}</p>
             <p>Description : {appointment.description}</p>
+            <p> doctor : {appointment.doctorName}</p>
+            <p> reason: {appointment.reason}</p>
+            <p> {appointment.date} - {appointment.time}</p>
           </li>
         ))}
       </ul>

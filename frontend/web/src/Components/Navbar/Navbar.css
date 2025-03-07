@@ -59,10 +59,15 @@
   display: none;
   flex-direction: column;
   cursor: pointer;
+  margin-right: 20px;
+  background-color:black;
+  
 }
+
 
 .navbar-toggle span {
   background-color: #fff;
+
   height: 3px;
   width: 30px;
   margin: 5px 0;
@@ -95,6 +100,7 @@
 }
 
 @media (max-width: 768px) {
+  
   .navbar-links {
     display: none;
     flex-direction: column;
@@ -119,5 +125,6 @@
 
   .navbar-toggle {
     display: flex;
+    
   }
 }

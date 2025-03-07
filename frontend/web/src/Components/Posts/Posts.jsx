@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchPosts, deletePost } from "../../redux/slices/postsSlice";
-import "./Home.css";
+import "./css/Posts.css";
 
 const Posts = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,14 @@ const Posts = () => {
   const posts = useSelector((state) => state.posts.list);
   const loading = useSelector((state) => state.posts.loading);
   const error = useSelector((state) => state.posts.error);
+  const [loadingImages, setLoadingImages] = useState({});
+
+  const handleImageLoad = (id) => {
+    setLoadingImages((prevState) => ({
+      ...prevState,
+      [id]: false, // Indique que l'image est chargée
+    }));
+  };
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -20,7 +28,7 @@ const Posts = () => {
   };
 
   const handleGet = (id) => {
-    navigate(`/get_post/${id}`);
+    navigate(`/post/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -51,19 +59,27 @@ const Posts = () => {
           <li key={post._id}>
             <p><strong>{post.title}</strong> </p>
             <p>{post.createdAt}</p>
+            
             {post.images && post.images.length > 0 && (
               <div className="post-images">
                 {post.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={`http://localhost:8082/uploads/${image}`}
-                    alt={`Image ${index + 1}`}
-                    className="post-image"
-                  />
+                  <div key={index}>
+                    {loadingImages[post._id] ? (
+                      <div>Chargement de l'image...</div> // Indicateur de chargement
+                    ) : (
+                      <img
+                        src={`/uploads/${image}`}
+                        alt={`Image ${index + 1}`}
+                        className="post-image"
+                        onLoad={() => handleImageLoad(post._id)}
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
             )}
             <button className="get" onClick={() => handleGet(post._id)}>Voir plus</button>
+            {/* Les boutons Modifier et Supprimer */}
             {/* <button className="update" onClick={() => handleEdit(post._id)}>Modifier</button>
             <button className="delete" onClick={() => handleDelete(post._id)}>Effacer</button> */}
           </li>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Logout from '../Logout/logout';
+import Logout from '../Logout/Logout';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -15,7 +15,7 @@ const Navbar = () => {
         {/* <img src="/logo.svg" alt="Logo" /> */}
         <h3>RebootMind</h3>
       </div>
-      <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
+      <div className="navbar-toggle" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>
         <span></span>
         <span></span>

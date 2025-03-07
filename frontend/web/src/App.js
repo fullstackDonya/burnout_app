@@ -11,7 +11,7 @@ import Users from "./Components/Users/Users";
 import AddUser from "./Components/Users/AddUser";
 import UpdateUser from "./Components/Users/UpdateUser";
 import Navbar from "./Components/Navbar/Navbar"; 
-import Logout from "./Components/Logout/logout";
+import Logout from "./Components/Logout/Logout";
 import  ConversationPage from "./pages/ConversationPage"; 
 import Account from "./Components/Users/Account"; 
 import Chat from "./Components/Conversations/Chat";
@@ -25,8 +25,8 @@ import Contact from "./Components/Contacts/CreateContactForm";
 import CreateContactForm from "./Components/Contacts/CreateContactForm";
 import Footer from "./Components/Footer/Footer";
 import Questionnaire from './Components/Diagnostics/Questionnaire';
-
-
+import Posts from "./Components/Posts/Posts";
+import PostDetails from "./Components/Posts/PostDetails";
 
 function App() {
   
@@ -37,6 +37,8 @@ function App() {
         <BrowserRouter>
           <Navbar /> 
           <Routes>
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/post/:id" element={<PostDetails />} /> 
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

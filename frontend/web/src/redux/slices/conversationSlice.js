@@ -28,7 +28,12 @@ export const fetchConversations = createAsyncThunk(
 export const createConversation = createAsyncThunk(
   "conversations/create",
   async ({ senders }, { getState, rejectWithValue }) => {  
-    const { token } = getState().auth;
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+
+    if (!userId || !token) {
+      return rejectWithValue("Utilisateur non connecté");
+    }
 
     try {
       const response = await axios.post("/conversations", { senders }, {

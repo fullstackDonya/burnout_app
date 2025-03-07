@@ -12,6 +12,15 @@ export const fetchPosts = createAsyncThunk(
       }
     }
   );
+
+// Async thunk pour récupérer un post par ID
+export const fetchPostById = createAsyncThunk(
+  'posts/fetchPostById',
+  async (id) => {
+    const response = await axios.get(`/post/${id}`);
+    return response.data;
+  }
+);
   
 export const updatePost = createAsyncThunk(
     'posts/updatePost',
@@ -46,28 +55,42 @@ export const deletePost = createAsyncThunk(
   );
   
 
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState: {
-    list: [],
-    loading: false,
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchPosts.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list = action.payload;
-      })
-      .addCase(fetchPosts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },
-});
-
-export default postsSlice.reducer;
+  const postsSlice = createSlice({
+    name: "posts",
+    initialState: {
+      list: [],
+      currentPost: null,  // Ajout d'un champ pour stocker le post sélectionné
+      loading: false,
+      error: null,
+    },
+    reducers: {},
+    extraReducers: (builder) => {
+      builder
+        .addCase(fetchPosts.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchPosts.fulfilled, (state, action) => {
+          state.loading = false;
+          state.list = action.payload;
+        })
+        .addCase(fetchPosts.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        })
+        // Ajout de la gestion de fetchPostById
+        .addCase(fetchPostById.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchPostById.fulfilled, (state, action) => {
+          state.loading = false;
+          state.currentPost = action.payload; // Stocke le post récupéré
+        })
+        .addCase(fetchPostById.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        });
+    },
+  });
+  
+  export default postsSlice.reducer;
+  

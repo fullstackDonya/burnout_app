@@ -14,6 +14,7 @@ export const fetchMessages = createAsyncThunk(
       const response = await axios.get(`/messages/${conversationId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          userId: userId,
         },
       });
 
@@ -26,10 +27,10 @@ export const fetchMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
   "messages/sendMessage",
-  async ({ sender, conversation, content }, { rejectWithValue, getState }) => {
+  async ({ sender, conversationId, content }, { rejectWithValue, getState }) => {
     try {
       const { auth } = getState();
-      const response = await axios.post(`/send`, { sender, conversation, content }, {
+      const response = await axios.post(`/send`, { sender, conversation : conversationId, content }, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           'Content-Type': 'application/json'
@@ -53,13 +54,32 @@ const messageSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    addMessageToConversation: (state, action) => {
+      const { conversation, ...message } = action.payload;
+      const conversationId = conversation; 
+      
+      if (state.messages[conversationId]) {
+          state.messages[conversationId].push(message);
+      } else {
+          state.messages[conversationId] = [message];
+      }
+      
+        if (state.messages[conversationId]) {
+            state.messages[conversationId].push(message);
+        } else {
+            state.messages[conversationId] = [message];
+        }
+    }
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchMessages.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
+        console.log("📩 Messages reçus de l'API :", action.payload);
         state.loading = false;
         state.messages[action.meta.arg] = action.payload;
       })
@@ -78,4 +98,5 @@ const messageSlice = createSlice({
   },
 });
 
+export const { addMessageToConversation } = messageSlice.actions;
 export default messageSlice.reducer;

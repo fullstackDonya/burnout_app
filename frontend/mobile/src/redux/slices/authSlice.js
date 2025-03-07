@@ -43,11 +43,24 @@ export const register = createAsyncThunk(
   }
 );
 
+export const convertImageToBW = createAsyncThunk(
+  'auth/convertImageToBW',
+  async ({ imagePath, outputPath }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/convert-to-bw', { imagePath, outputPath });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   userId: null,
   token: null,
   loading: false,
   error: null,
+  convertedImagePath: null,
 };
 
 const authSlice = createSlice({
@@ -88,6 +101,9 @@ const authSlice = createSlice({
         state.token = null;
         await AsyncStorage.removeItem('userId');
         await AsyncStorage.removeItem('token');
+      })
+      .addCase(convertImageToBW.fulfilled, (state, action) => {
+        state.convertedImagePath = action.payload.outputPath;
       });
   },
 });

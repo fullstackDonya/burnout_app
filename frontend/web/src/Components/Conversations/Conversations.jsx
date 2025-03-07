@@ -21,7 +21,10 @@ const Conversations = () => {
       dispatch(fetchConversations());
     }
   }, [dispatch, userId]);
-  console.log("🔹 userId depuis Redux dans Conversations.js:", userId);
+
+  useEffect(() => {
+    console.log("Conversations:", conversations);
+  }, [conversations]);
 
   const handleUserSelection = (id) => {
     if (id === userId) return;
@@ -51,8 +54,9 @@ const Conversations = () => {
   };
 
   const handleOpenConversation = (conversationId) => {
-    dispatch(setSelectedConversationId(conversationId)); // Définir l'ID de la conversation sélectionnée dans le store Redux
-    dispatch(fetchMessages(conversationId)); // Charger les messages avant d'afficher la conversation
+    console.log("📩 Ouverture de la conversation:", conversationId); // Debug
+    dispatch(setSelectedConversationId(conversationId)); 
+    dispatch(fetchMessages(conversationId));
     navigate(`/chat`);
   };
 
@@ -61,7 +65,13 @@ const Conversations = () => {
       <ul>
         {conversations.map((conversation) => (
           <li key={conversation._id} onClick={() => handleOpenConversation(conversation._id)}>
-            <h3>Conversation avec {conversation.senders.map(sender => sender.name).join(", ")}</h3>
+            <h3>
+              {conversation.senders && Array.isArray(conversation.senders)
+                ? conversation.senders
+                    .map(sender => sender.username)
+                    .join(", ")
+                : "Aucun participant"}
+            </h3>
           </li>
         ))}
       </ul>

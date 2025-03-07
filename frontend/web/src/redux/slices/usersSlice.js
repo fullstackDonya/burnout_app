@@ -1,7 +1,31 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../utils/axiosConfig';
 
-// Action pour récupérer la liste des utilisateurs connectés
+// Action pour récupérer uniquement la liste des utilisateurs connectés
+export const fetchConnectedUsers = createAsyncThunk(
+  "users/fetchConnectedUsers",
+  async (_, { getState, rejectWithValue }) => {
+    const { token } = getState().auth; 
+    
+    if (!token) {
+      return rejectWithValue("Utilisateur non connecté");
+    }
+
+    try {
+      const response = await axios.get(`/connected`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Erreur serveur");
+    }
+  }
+);
+
+
+// Action pour récupérer la liste es utilisateurs
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async (_, { rejectWithValue }) => {
@@ -56,6 +80,17 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.list = action.payload;
+      })
+      .addCase(fetchConnectedUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchConnectedUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.connectedUsers = action.payload;
+      })
+      .addCase(fetchConnectedUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;

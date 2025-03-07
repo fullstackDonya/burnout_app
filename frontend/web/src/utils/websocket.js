@@ -1,44 +1,47 @@
-import store from "../redux/store";
-import { addMessageToConversation } from "../redux/slices/conversationSlice";
+import { addMessageToConversation } from "../redux/slices/messageSlice";
+import store from '../redux/store';
 
-const WS_URL = "ws://localhost:8082"; 
-let socket;
+let socket = null;
 
-export const connectWebSocket = () => {
-  socket = new WebSocket(WS_URL);
+export const connectWebSocket = (conversationId) => {
+    if (socket) {
+        socket.close();
+        console.log("🔌 Fermeture de l'ancienne connexion WebSocket...");
+    }
 
-  socket.onopen = () => {
-    console.log("WebSocket connecté");
-  };
+    socket = new WebSocket(`ws://localhost:8082/ws/${conversationId}`);
 
-  socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    console.log("Nouveau message reçu :", message);
-    store.dispatch(addMessageToConversation(message));
-  };
+    socket.onopen = () => {
+        console.log('WebSocket connecté');
+    };
 
-  socket.onclose = () => {
-    console.log("WebSocket déconnecté");
-  };
+    socket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        console.log("Message reçu via WebSocket:", message);
 
-  socket.onerror = (error) => {
-    console.error("⚠️ WebSocket erreur :", error);
-  };
-};
+        store.dispatch(addMessageToConversation({
+            conversationId: message.conversation,
+            message
+        }));
+    };
 
-export const sendWebSocketMessage = (message) => {
-  if (socket && socket.readyState === WebSocket.OPEN) { 
-    console.log("Envoi du message via WebSocket:", message);
-    socket.send(JSON.stringify(message));
-  } else {
-    console.error("WebSocket n'est pas connecté");
-  }
+    socket.onclose = () => {
+        console.log('WebSocket déconnecté.');
+    };
+
+    socket.onerror = (error) => {
+        console.error('Erreur WebSocket:', error);
+    };
 };
 
 export const sendMessage = (message) => {
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(message));
-  } else {
-    console.error("WebSocket n'est pas connecté");
-  }
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify(message));
+        console.log("Message envoyé via WebSocket :", message);
+    } else {
+        console.warn("⚠️ WebSocket non connecté, impossible d'envoyer le message.");
+    }
 };
+
+// Fonction pour récupérer l'instance WebSocket actuelle
+export const getSocket = () => socket;

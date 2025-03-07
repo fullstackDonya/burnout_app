@@ -1,42 +1,34 @@
-/* Style principal pour le container de chaque message */
 .chat-container {
-   margin-top: 170px;
+  margin-top: 83px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
 .message {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-  
-  /* Style pour les messages envoyés par l'utilisateur connecté (aligné à droite) */
-  .message.right {
-    justify-content: flex-end; /* Aligner à droite */
-    text-align: right;
-  }
-  
-  /* Style pour les messages envoyés par l'autre utilisateur (aligné à gauche) */
-  .message.left {
-    justify-content: flex-start; /* Aligner à gauche */
-    text-align: left;
-  }
-  
-  /* Style pour le contenu du message */
-  .message-content {
-    max-width: 60%;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-  }
-  
-  /* Style spécifique pour les messages envoyés par l'utilisateur connecté (à droite) */
-  .message.right .message-content {
-    background-color: #0084ff;
-    color: white;
-  }
-  
-  /* Style spécifique pour les messages envoyés par l'autre utilisateur (à gauche) */
-  .message.left .message-content {
-    background-color: #e5e5ea;
-    color: black;
-  }
-  
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px;
+  word-wrap: break-word;
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: #4caf50;
+  color: white;
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #e0e0e0;
+  color: black;
+}

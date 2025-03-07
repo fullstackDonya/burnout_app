@@ -6,15 +6,18 @@ export const login = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post('/login', credentials);
+      // console.log("Login response:", response.data); // Vérifiez si userId est bien présent
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data.userId);
       localStorage.setItem('role', response.data.role);
       return response.data;
     } catch (error) {
+      console.error("Login error:", error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
 );
+
 
 export const logout = createAsyncThunk(
   'auth/logout',
@@ -63,10 +66,15 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
+        console.log("Stockage local:", {
+          token: localStorage.getItem('token'),
+          userId: localStorage.getItem('userId'),
+          role: localStorage.getItem('role')
+        });
         state.loading = false;
         state.userId = action.payload.userId;
         state.token = action.payload.token;
-        state.role = action.payload.role;
+        state.role = action.payload.role; 
         localStorage.setItem('userId', action.payload.userId);
         localStorage.setItem('token', action.payload.token);
         localStorage.setItem('role', action.payload.role);

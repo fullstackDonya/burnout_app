@@ -1,7 +1,8 @@
-// filepath: /Users/donyab/Desktop/Stack_mern_typescript/frontend/mobile/src/screens/HomeScreen.jsx
+// filepath: /src/screens/HomeScreen.jsx
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -9,29 +10,33 @@ const HomeScreen = () => {
   const cards = [
     {
       id: 1,
-      title: 'Card 1',
-      description: 'This is the description for card 1.',
-      image: 'https://via.placeholder.com/150',
+      title: 'Prévention du Burnout',
+      description: 'Des conseils et exercices pour prévenir le burnout et améliorer votre bien-être quotidien.',
+      image: 'https://via.placeholder.com/300x150/81D4FA/ffffff?text=Prévention',
     },
     {
       id: 2,
-      title: 'Card 2',
-      description: 'This is the description for card 2.',
-      image: 'https://via.placeholder.com/150',
+      title: 'Techniques de Relaxation',
+      description: 'Découvrez des techniques de méditation, de respiration et de relaxation pour diminuer le stress.',
+      image: 'https://via.placeholder.com/300x150/A5D6A7/ffffff?text=Relaxation',
     },
     {
       id: 3,
-      title: 'Card 3',
-      description: 'This is the description for card 3.',
-      image: 'https://via.placeholder.com/150',
+      title: 'Exercices de Bien-être',
+      description: 'Programme d’exercices simples pour retrouver énergie et équilibre.',
+      image: 'https://via.placeholder.com/300x150/FFCC80/ffffff?text=Bien-être',
     },
   ];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+      <Text style={styles.title}>Bien-être et Prévention du Burnout</Text>
       {cards.map((card) => (
-        <TouchableOpacity key={card.id} style={styles.card} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity
+          key={card.id}
+          style={styles.card}
+          onPress={() => navigation.navigate('Profile')}
+        >
           <Image source={{ uri: card.image }} style={styles.cardImage} />
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{card.title}</Text>
@@ -39,10 +44,12 @@ const HomeScreen = () => {
           </View>
         </TouchableOpacity>
       ))}
-      <Button
-        title="Go to Profile"
-        onPress={() => navigation.navigate('Profile')}
-      />
+      <TouchableOpacity style={styles.infoButton} onPress={() => navigation.navigate('BurnoutInfo')}>
+        <Text style={styles.infoButtonText}>En savoir plus sur le burnout</Text>
+      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <Button title="Aller au Profil" onPress={() => navigation.navigate('Profile')} color="#00796B" />
+      </View>
     </ScrollView>
   );
 };
@@ -50,24 +57,26 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    backgroundColor: '#E0F7FA',
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#00695C',
     marginBottom: 20,
+    textAlign: 'center',
   },
   card: {
     width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
     marginBottom: 20,
     overflow: 'hidden',
   },
@@ -76,15 +85,34 @@ const styles = StyleSheet.create({
     height: 150,
   },
   cardContent: {
-    padding: 10,
+    padding: 15,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#00796B',
+    marginBottom: 8,
   },
   cardDescription: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 16,
+    color: '#616161',
+  },
+  infoButton: {
+    backgroundColor: '#00796B',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+  },
+  infoButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: '100%',
   },
 });
 

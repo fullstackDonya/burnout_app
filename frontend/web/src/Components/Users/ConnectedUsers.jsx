@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsers } from '../../redux/slices/usersSlice';
+import { fetchConnectedUsers} from '../../redux/slices/usersSlice';
 import { createConversation } from '../../redux/slices/conversationSlice';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +15,7 @@ const ConnectedUsers = () => {
     const userId = useSelector((state) => state.auth.userId);
 
     useEffect(() => {
-        dispatch(fetchUsers());
+        dispatch(fetchConnectedUsers());
     }, [dispatch]);
 
     const handleStartConversation = async (user) => {
